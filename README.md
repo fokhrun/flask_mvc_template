@@ -1,1 +1,1 @@
-# flask_mvc_template
+# Flask MVC Template
