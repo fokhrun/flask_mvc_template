@@ -4,7 +4,7 @@
 from . import db
 
 
-class Roles(db.Model):
+class Role(db.Model):
     __tablename__ = "Roles"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
