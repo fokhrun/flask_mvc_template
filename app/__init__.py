@@ -26,8 +26,11 @@ def create_app(config_name="default"):
     flask.Flask
         Flask application instance
     """
+    from .main import main as main_blueprint
+    
     app = Flask(__name__)
     app.config.from_object(config[config_name])
+    app.register_blueprint(main_blueprint)
     config[config_name].init_app(app)
 
     bootstrap.init_app(app)
