@@ -30,3 +30,8 @@ def index():
         form=form,
         name=session.get("known", False)
     )
+
+
+@main.route('/', methods=["GET"])
+def table_reservation():
+    return render_template('table_reservation/tables.html')
