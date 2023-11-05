@@ -1,10 +1,11 @@
 from flask import render_template, session, redirect, url_for
+from flask_login import login_required
 from .. import db
 from ..models import User, Reservation, Table
 from . import main
 from .forms import NameForm, ReservationForm
 
-
+@main.route("/", methods=["GET", "POST"])
 @main.route("/home", methods=["GET", "POST"])
 def index():
     form = NameForm()
@@ -27,7 +28,8 @@ def index():
     )
 
 
-@main.route("/", methods=["GET", "POST"])
+@main.route("/reserve", methods=["GET", "POST"])
+@login_required
 def table_reservation():
     date_form = ReservationForm()
     slots = []
