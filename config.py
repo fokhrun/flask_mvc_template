@@ -24,7 +24,7 @@ class DevelopmentConfig(Config):
         f"{os.getenv('DB_USERNAME')}"
         f":{os.getenv('DB_PASSWORD')}"
         f"@{os.getenv('DB_HOST')}"
-        f"/{os.getenv('DATABASE')}"
+        f"/{os.getenv('DATABASE_DEV')}"
     )
 
 
@@ -38,7 +38,7 @@ class TestConfig(Config):
         f"{os.getenv('DB_USERNAME')}"
         f":{os.getenv('DB_PASSWORD')}"
         f"@{os.getenv('DB_HOST')}"
-        f"/{os.getenv('DATABASE')}"
+        f"/{os.getenv('DATABASE_TEST')}"
     )
 
 config = {
