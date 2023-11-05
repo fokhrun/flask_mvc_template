@@ -15,15 +15,15 @@ migrate = Migrate(app, db)
 Migration commands
 
 flask db init
-flask db migrate -m "initial migration"
+flask db migrate -m "message"
 flask db upgrade
+flask db stamp head
 flask db downgrade
 """
 
 with app.app_context():
 
     upgrade()
-
 
     db.drop_all()
     db.create_all()
