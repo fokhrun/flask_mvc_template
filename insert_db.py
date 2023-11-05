@@ -6,8 +6,9 @@ from calendar import monthrange
 from itertools import product
 from app import db, create_app
 from app.models import User, Role, Table, Reservation, ReservationSlot
+from flask_migrate import upgrade
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app(os.getenv('FLASK_CONFIG') or 'production')
 migrate = Migrate(app, db)
 
 """
@@ -20,18 +21,23 @@ flask db downgrade
 """
 
 with app.app_context():
+
+    upgrade()
+    
+    print (db)
+
     db.drop_all()
     db.create_all()
 
     admin_role = Role(name='Admin')
     guest_role = Role(name='Guest')
-    
+
     users = [
         User(username='john', role=admin_role),
         User(username='susan', role=guest_role),
         User(username='david', role=guest_role)
     ]
-    
+
     tables = [
         Table(table_capacity="two"),
         Table(table_capacity="four"),
@@ -42,7 +48,8 @@ with app.app_context():
     ]
 
     db.session.add_all([admin_role, guest_role, *users, *tables])   
-
+    print (db.session)
+    
     year = 2023
     month = 11
     _, num_days = monthrange(year, month)
@@ -61,13 +68,13 @@ with app.app_context():
 
     for _ in Role.query.all():
         print(_)
-
+    print (Role.query.all())
     for _ in User.query.all():
         print(_)
-
+    """
     for _ in Table.query.all():
         print(_)
     
     for _ in Reservation.query.all():
         print(_)
-    
+    """

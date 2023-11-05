@@ -41,7 +41,22 @@ class TestConfig(Config):
         f"/{os.getenv('DATABASE_TEST')}"
     )
 
+
+class ProductionConfig(Config):
+
+    DEBUG = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    SQLALCHEMY_DATABASE_URI = (
+        "mysql://"
+        f"{os.getenv('DB_USERNAME_PROD')}"
+        f":{os.getenv('DB_PASSWORD_PROD')}"
+        f"@{os.getenv('DB_HOST_PROD')}"
+        f"/{os.getenv('DATABASE_PROD')}"
+    )
+
 config = {
     "default": DevelopmentConfig,
     "testing": TestConfig,
+    "production": ProductionConfig
 }
