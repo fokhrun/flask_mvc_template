@@ -23,8 +23,7 @@ flask db downgrade
 with app.app_context():
 
     upgrade()
-    
-    print (db)
+
 
     db.drop_all()
     db.create_all()
@@ -48,8 +47,7 @@ with app.app_context():
     ]
 
     db.session.add_all([admin_role, guest_role, *users, *tables])   
-    print (db.session)
-    
+
     year = 2023
     month = 11
     _, num_days = monthrange(year, month)
@@ -68,13 +66,12 @@ with app.app_context():
 
     for _ in Role.query.all():
         print(_)
-    print (Role.query.all())
+
     for _ in User.query.all():
         print(_)
-    """
+
     for _ in Table.query.all():
         print(_)
-    
+
     for _ in Reservation.query.all():
         print(_)
-    """
