@@ -5,6 +5,7 @@ from ..models import User, Reservation, Table
 from . import main
 from .forms import NameForm, ReservationForm
 
+
 @main.route("/", methods=["GET", "POST"])
 @main.route("/home", methods=["GET", "POST"])
 def index():
