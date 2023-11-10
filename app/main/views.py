@@ -3,7 +3,9 @@ from flask_login import login_required
 from .. import db
 from ..models import User, Reservation, Table
 from . import main
-from .forms import NameForm, ReservationForm
+from .forms import NameForm, ReservationForm, SelectItemsForm
+import json
+from datetime import date
 
 
 @main.route("/", methods=["GET", "POST"])
@@ -30,40 +32,39 @@ def index():
 
 
 @main.route("/reserve", methods=["GET", "POST"])
-@login_required
 def table_reservation():
-    date_form = ReservationForm()
-    slots = []
-    if date_form.validate_on_submit():
-        print(date_form.reserve_date.data)
-        session["date"] = date_form.reserve_date.data
-
-        reserve_date = session["date"]
-
-        reservations = Reservation.query.filter_by(reservation_date=reserve_date).all()
-        print(reservations)
-
-        slot_tables = []
-
-        for reservation in reservations:
-            table_reserved = {}
-            table = Table.query.filter_by(id=reservation.table_id).first()
-
-            table_reserved["table_no"] = table.id
-            table_reserved["seat_capacity"] = table.table_capacity.value
-            table_reserved["reservation_time_slot"] = reservation.reservation_time_slot.name.capitalize()
-            table_reserved["reservation_status"] = (
-                "Reserved" if reservation.reservation_status else "Not reserved"
-            )
-
-            slot_tables.append(table_reserved)
-            
-        slots = [slot_tables]
-        session["slots"] = slots
+    reservations = Reservation.query.filter_by(reservation_date=date.today()).all()
+    res_form = ReservationForm()
+    if res_form.validate_on_submit():
+        for idx, reservation in enumerate(reservations):
+            reservation.reservation_status = res_form.reserved_statuses.data[idx][
+                "reserved"
+            ]
+        db.session.commit()
         return redirect(url_for("main.table_reservation"))
 
+    slots = []
+    slot_tables = []
+    reserved_statuses = []
+    table_capacities = {table.id: table.table_capacity.value for table in Table.query.all()}
+
+    for reservation in reservations:
+        table_reserved = {
+            "table_no": reservation.table_id,
+            "seat_capacity": table_capacities[reservation.table_id],
+            "reservation_time_slot": reservation.reservation_time_slot.name.capitalize(),
+            "reservation_status": reservation.get_status_string().capitalize(),
+        }
+
+        slot_tables.append(table_reserved)
+        reserved_statuses.append({"reserved": reservation.reservation_status})
+
+    slots = [slot_tables]
     return render_template(
         "table_reservation/tables.html",
-        date_form=date_form,
-        slots=session["slots"] if "slots" in session else [],
+        res_form=ReservationForm(
+            reserve_date=date.today(),
+            reserved_statuses=reserved_statuses
+        ),
+        slots=slots,
     )

@@ -57,8 +57,7 @@ with app.app_context():
             Reservation(
                 reservation_time_slot=reservation_slot,
                 table=table,
-                reservation_date=date_slot,
-                reservation_status=False
+                reservation_date=date_slot
             )
         )
 
