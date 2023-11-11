@@ -30,17 +30,19 @@
                     <th scope="col">Seat capacity</th>
                     <th scope="col">Time slot</th>
                     <th scope="col">Reservation Status</th>
+                    <th scope="col">Reserved by</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for field in res_form.reserved_statuses %}
-                {% set table = slot[loop.index0]%}
+                {% set res = slot[loop.index0]%}
                 <tr>
-                    <td>{{ table.table_no }}</td>
-                    <td>{{ table.seat_capacity }}</td>
-                    <td>{{ table.reservation_time_slot}}</td>
-                    <td>{{ table.reservation_status }}</td>
+                    <td>{{ res.table_no }}</td>
+                    <td>{{ res.seat_capacity }}</td>
+                    <td>{{ res.reservation_time_slot}}</td>
+                    <td>{{ res.reservation_status }}</td>
+                    <td>{{ res.reserved_by }}</td>
                     <td>
                         {{field()}}
                     </td>
@@ -52,3 +54,4 @@
 </div>
 </form>
 {% endblock %}
+

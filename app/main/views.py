@@ -1,11 +1,12 @@
 from flask import render_template, session, redirect, url_for
 from flask_login import login_required
 from .. import db
-from ..models import User, Reservation, Table
+from ..models import User, Reservation, Table, load_user
 from . import main
 from .forms import NameForm, ReservationForm, SelectItemsForm
 import json
 from datetime import date
+from flask_login import current_user
 
 
 @main.route("/", methods=["GET", "POST"])
@@ -32,28 +33,39 @@ def index():
 
 
 @main.route("/reserve", methods=["GET", "POST"])
+@login_required
 def table_reservation():
     reservations = Reservation.query.filter_by(reservation_date=date.today()).all()
     res_form = ReservationForm()
     if res_form.validate_on_submit():
         for idx, reservation in enumerate(reservations):
-            reservation.reservation_status = res_form.reserved_statuses.data[idx][
-                "reserved"
-            ]
+            reserved = res_form.reserved_statuses.data[idx]["reserved"]
+
+            reservation.reservation_status = reserved
+            reservation.user_id = current_user.id if reserved else None
+
         db.session.commit()
         return redirect(url_for("main.table_reservation"))
 
     slots = []
     slot_tables = []
     reserved_statuses = []
-    table_capacities = {table.id: table.table_capacity.value for table in Table.query.all()}
+    table_capacities = {
+        table.id: table.table_capacity.value for table in Table.query.all()
+    }
 
     for reservation in reservations:
+        if reservation.user_id is not None:
+            user = User.query.get(reservation.user_id)
+        else:
+            user = None
+        
         table_reserved = {
             "table_no": reservation.table_id,
             "seat_capacity": table_capacities[reservation.table_id],
             "reservation_time_slot": reservation.reservation_time_slot.name.capitalize(),
             "reservation_status": reservation.get_status_string().capitalize(),
+            "reserved_by": user.username if user else '',
         }
 
         slot_tables.append(table_reserved)
@@ -63,8 +75,7 @@ def table_reservation():
     return render_template(
         "table_reservation/tables.html",
         res_form=ReservationForm(
-            reserve_date=date.today(),
-            reserved_statuses=reserved_statuses
+            reserve_date=date.today(), reserved_statuses=reserved_statuses
         ),
         slots=slots,
     )
