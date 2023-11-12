@@ -22,9 +22,6 @@ flask db downgrade
 """
 
 with app.app_context():
-    
-    print (db)
-
     upgrade()
 
     db.drop_all()

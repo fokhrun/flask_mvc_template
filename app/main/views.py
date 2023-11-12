@@ -92,3 +92,15 @@ def table_reservation():
         ),
         slots=slots,
     )
+
+
+@main.route("/admin", methods=["GET", "POST"])
+@login_required
+def admin_reservation():
+    admin_role = Role.query.filter_by(name="Admin").first()
+    is_admin = current_user.role == admin_role
+    reservation_dates_so_far = sorted(list(set([
+        reservation.reservation_date for reservation in Reservation.query.filter(Reservation.reservation_date >= date.today()).all()
+    ])))
+    print(reservation_dates_so_far)
+    return render_template("admin.html", reservation_dates_so_far=reservation_dates_so_far, is_admin=is_admin)

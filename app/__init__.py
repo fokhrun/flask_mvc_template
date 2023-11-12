@@ -14,12 +14,11 @@ login_manager = LoginManager()
 login_manager.login_view = "auth.login"
 
 
-
 def create_app(config_name="default"):
     """
     Application factory function that delay the creation of the application
-    Typically invoked from a script that gives time to set the configuration, 
-    and can create multiple application instances. 
+    Typically invoked from a script that gives time to set the configuration,
+    and can create multiple application instances.
     Can be very useful during testing.
 
     Parameters
