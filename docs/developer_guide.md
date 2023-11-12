@@ -1,20 +1,31 @@
 
-## create a venv
+# Developer Guide
 
-python -m venv app-env
+## Developer Environment
 
-in windows:
-activate by app-env\scripts\activate
-deactivate by deactivate
-
+1. Ensure that you have a Python version at least `Python v3.11` and `pip v23.3.1`
+2. Clone the repository https://github.com/fokhrun/restaurant_reservation.git as `restaurant_reservation` in your local directory
+3. Work inside `restaurant_reservation`
+2. Create a virtual environment using `venv`:
+    ```
+    1. python3 -m venv venv
+    2. .\venv\Scripts\activate
+    3. pip install -r .\requirements.txt
+    ```
+5. Download and install MySQL v8.0.35 or upwards from `https://dev.mysql.com/downloads/installer/`
+6. Setup a database `restaurant_dev`
+7. Make a copy of `.env_template` as `.env` and fill in the missing valuesg
+8. Initialize the database with right tables and their starter values by running `python .\iniatialize_db.py` 
+9. Run the app `flask run --debug`
+10. You can use `VSCode` as an editor
 
 ## Add debugger
-Debugging a Flask app in VSCode involves setting up a launch configuration. 
+Debugging a Flask app in `VSCode` involves setting up a launch configuration. 
 Here's an example configuration for debugging a Flask app in VSCode:
 
-- Open your Flask project in VSCode.
-- Create a launch.json file inside the .vscode directory in your project if it doesn't exist.
-- VsCode will auto generate the launch.json if you provide correct options, for example python, then Python: Flask, and wsgi.py
+- Open your Flask project in `VSCode`
+- Create a `launch.json` file inside the `.vscode` directory in your project if it doesn't exist.
+- VSCode will auto generate the `launch.json` if you provide correct options, for example python, then Python: Flask, and wsgi.py
 
 
 """
