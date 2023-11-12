@@ -8,7 +8,7 @@ from app import db, create_app
 from app.models import User, Role, Table, Reservation, ReservationSlot
 from flask_migrate import upgrade
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'production')
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
 
 """
@@ -22,6 +22,8 @@ flask db downgrade
 """
 
 with app.app_context():
+    
+    print (db)
 
     upgrade()
 
@@ -32,9 +34,9 @@ with app.app_context():
     guest_role = Role(name='Guest')
 
     users = [
-        User(username='john', role=admin_role),
-        User(username='susan', role=guest_role),
-        User(username='david', role=guest_role)
+        User(username='john', role=admin_role, email='john@gmail.com', password='123'),
+        User(username='sobhani', role=guest_role, email='sobhani@gmail.com', password='123'),
+        User(username='aatif', role=guest_role, email='aatif@gmail.com', password='123')
     ]
 
     tables = [
@@ -46,7 +48,7 @@ with app.app_context():
         Table(table_capacity="six")
     ]
 
-    db.session.add_all([admin_role, guest_role, *users, *tables])   
+    db.session.add_all([admin_role, guest_role, *users, *tables])
 
     year = 2023
     month = 11
@@ -57,7 +59,8 @@ with app.app_context():
             Reservation(
                 reservation_time_slot=reservation_slot,
                 table=table,
-                reservation_date=date_slot
+                reservation_date=date_slot,
+                reservation_status=False
             )
         )
 
