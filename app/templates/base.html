@@ -23,7 +23,9 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('main.table_reservation') }}">Reserve</a></li>
+                {% if current_user.role and current_user.role.name == 'Admin' %}
                 <li><a href="{{ url_for('main.admin_reservation') }}">Admin</a></li>
+                {% endif %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

@@ -20,6 +20,13 @@ class ReservationForm(FlaskForm):
     submit = SubmitField("Reserve Tables")
 
 
+class ReserveSlotForm(FlaskForm):
+    reserve_from_date = DateField("From date", format="%Y-%m-%d")
+    reserve_to_date = DateField("To date", format="%Y-%m-%d")
+    submit = SubmitField("Create slot tables")
+
+
+# experiments
 class ItemForm(FlaskForm):
     reserved = BooleanField(label="Reserve")
 

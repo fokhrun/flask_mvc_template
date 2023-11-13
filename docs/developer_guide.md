@@ -62,3 +62,8 @@ Here's an example configuration for debugging a Flask app in VSCode:
 - Start the debugger by pressing F5 or clicking on the debug icon in VSCode and selecting the Flask configuration you just created.
 
 - This setup will allow you to debug your Flask app by running it in debug mode within VSCode.
+
+## Testing
+
+- Add test codes in `tests` folder
+- Run `flask test`

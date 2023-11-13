@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Reservation Admin{% endblock %}
 
@@ -8,20 +9,24 @@
     <h1>Hello, {% if is_admin %}{{ current_user.username }}{% else %}you are not an admin{% endif %}!</h1>
 </div>
 
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Reservation Slots Created So Far</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for something in reservation_dates_so_far %}
-        <tr>
-            <td>{{ something }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div>
+    <h2>Current reservation slots:
+    
+        From <strong>{{ res_so_far_from }}</strong> to 
+        <strong>{{ res_so_far_to }}</strong>
+    </h2>
+</div>
+
+<div>
+    <h2>Create new slots for the month of {{next_month}}, {{year}}</h2>
+    <form class="form"
+          method="POST">
+          {{ res_slot_form.hidden_tag() }}
+  
+          {{ wtf.form_field(res_slot_form.submit) }}
+        
+    </form>    
+</div>
+
 
 {% endblock %}
