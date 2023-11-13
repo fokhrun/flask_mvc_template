@@ -1,39 +1,24 @@
-from flask import render_template, session, redirect, url_for
-from flask_login import login_required
-from .. import db
-from ..models import User, Reservation, Table, Role, ReservationSlot
-from . import main
-from .forms import NameForm, ReservationForm, ReserveSlotForm
+"""Top level views for the application."""
+
+from calendar import monthrange, month_name
 from datetime import date
-from flask_login import current_user
-from sqlalchemy import or_, and_
-from calendar import monthrange
 from itertools import product
 from dateutil.relativedelta import relativedelta
-from calendar import month_name
+from flask import render_template, session, redirect, url_for
+from flask_login import current_user, login_required
+from sqlalchemy import and_, or_ 
+from .. import db
+from . import main
+from .forms import NameForm, ReservationForm, ReserveSlotForm
+from ..models import User, Reservation, Table, Role, ReservationSlot
 
 
-@main.route("/", methods=["GET", "POST"])
-@main.route("/home", methods=["GET", "POST"])
+
+@main.route("/")
+@main.route("/home")
 def index():
-    form = NameForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.name.data).first()
-        if user is None:
-            user = User(username=form.name.data)
-            db.session.add(user)
-            db.session.commit()
-            session["known"] = False
-        else:
-            session["known"] = True
-        session["name"] = form.name.data
-        return redirect(url_for(".index"))
-    return render_template(
-        "index.html",
-        form=form,
-        name=session.get("name"),
-        known=session.get("known", False),
-    )
+    """Renders HTML template for the home page"""
+    return render_template("index.html")
 
 
 @main.route("/reserve", methods=["GET", "POST"])
@@ -131,7 +116,7 @@ def get_next_month_year(current_date):
     next_month = next_month_date.month
     next_year = next_month_date.year
     return next_year, next_month
-    
+
 
 @main.route("/admin", methods=["GET", "POST"])
 @login_required
