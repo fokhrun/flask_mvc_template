@@ -4,14 +4,14 @@ from calendar import monthrange, month_name
 from datetime import date
 from itertools import product
 from dateutil.relativedelta import relativedelta
-from flask import render_template, session, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_required
-from sqlalchemy import and_, or_ 
+from sqlalchemy import and_, or_
 from .. import db
 from . import main
-from .forms import NameForm, ReservationForm, ReserveSlotForm
+from .forms import ReservationForm, ReserveSlotForm
 from ..models import User, Reservation, Table, Role, ReservationSlot
-
+from datetime import datetime
 
 
 @main.route("/")
@@ -24,79 +24,108 @@ def index():
 @main.route("/reserve", methods=["GET", "POST"])
 @login_required
 def table_reservation():
+    for_date = request.args.get("for_date")
+    reservation_date = (
+        date.today() if for_date == "today" else datetime.strptime(for_date, "%Y-%m-%d")
+    )
+
     admin_role = Role.query.filter_by(name="Admin").first()
     is_admin = current_user.role == admin_role
 
     if not is_admin:
-        reservations = Reservation.query.filter(
-            and_(
-                Reservation.reservation_date == date.today(),
-                or_(
-                    Reservation.user_id == current_user.id,
-                    Reservation.reservation_status == False,
-                ),
+        reservations = (
+            Reservation.query.filter(
+                and_(
+                    Reservation.reservation_date == reservation_date,
+                    or_(
+                        Reservation.user_id == current_user.id,
+                        Reservation.reservation_status == False,
+                    ),
+                )
             )
-        ).all()
+            .order_by(Reservation.reservation_time_slot)
+            .all()
+        )
     else:
-        reservations = Reservation.query.filter(
-            Reservation.reservation_date == date.today()
-        ).all()
+        reservations = (
+            Reservation.query.filter(Reservation.reservation_date == reservation_date)
+            .order_by(Reservation.reservation_time_slot)
+            .all()
+        )
 
     res_form = ReservationForm()
     if res_form.validate_on_submit():
         for idx, reservation in enumerate(reservations):
-            reserved_form = res_form.reserved_statuses.data[idx]["reserved"]
+            reserved_form = res_form.slot_reserved_statuses.data[idx]["reserved"]
             if reservation.reservation_status is not reserved_form:
                 reservation.reservation_status = reserved_form
                 reservation.user_id = current_user.id if reserved_form else None
 
         db.session.commit()
-        return redirect(url_for("main.table_reservation"))
+        return redirect(url_for("main.table_reservation") +  "".join(["?for_date=", reservation_date.strftime("%Y-%m-%d")]))
 
-    slots = []
-    slot_tables = []
-    reserved_statuses = []
+    slot_reserves = {}
+    slot_reserved_statuses = []
     table_capacities = {
         table.id: table.table_capacity.value for table in Table.query.all()
     }
     users = {user.id: user.username for user in User.query.all()}
 
     for reservation in reservations:
+        reservation_time_slot = reservation.reservation_time_slot.name.capitalize()
         table_reserved = {
             "table_no": reservation.table_id,
             "seat_capacity": table_capacities[reservation.table_id],
-            "reservation_time_slot": reservation.reservation_time_slot.name.capitalize(),
+            "reservation_time_slot": reservation_time_slot,
             "reservation_status": reservation.get_status_string().capitalize(),
             "reserved_by": users[reservation.user_id] if reservation.user_id else "",
         }
 
-        slot_tables.append(table_reserved)
-        reserved_statuses.append({"reserved": reservation.reservation_status})
+        if reservation_time_slot in slot_reserves:
+            slot_reserves[reservation_time_slot].append(table_reserved)            
+        else:
+            slot_reserves[reservation_time_slot] = [table_reserved]
+        
+        slot_reserved_statuses.append(
+                {"reserved": reservation.reservation_status}
+            )
 
-    slots = [slot_tables]
+    reserve_form = ReservationForm(
+        reserve_date=reservation_date, slot_reserved_statuses=slot_reserved_statuses
+    )
     return render_template(
         "table_reservation/tables.html",
-        res_form=ReservationForm(
-            reserve_date=date.today(), reserved_statuses=reserved_statuses
-        ),
-        slots=slots,
+        res_form=reserve_form,
+        slot_reserves=slot_reserves,
     )
 
 
-def get_reservation_slots(year, month):
-    tables = Table.query.all()
+def get_reservation_slots(year, month, tables):
+    """Generate reservation slots for a given month and year
+
+    Parameters
+    ----------
+    tables : list[Table]
+    year : int
+    month : int
+
+    Returns
+    -------
+    list[dict]
+        list of reservation slots
+    """
     _, num_days = monthrange(year, month)
     days = [date(year, month, day) for day in range(1, num_days + 1)]
-    reservation_slots = []
-    for date_slot, reservation_slot, table in product(days, ReservationSlot, tables):
-        reservation_slots.append(
-            Reservation(
-                reservation_time_slot=reservation_slot,
-                table=table,
-                reservation_date=date_slot,
-                reservation_status=False,
-            )
-        )
+    reservation_slots = [
+        {
+            "reservation_slot": reservation_slot,
+            "table": table,
+            "reservation_date": date_slot,
+            "reservation_status": False,
+        }
+        for date_slot, reservation_slot, table in product(days, ReservationSlot, tables)
+    ]
+
     return reservation_slots
 
 
@@ -144,7 +173,15 @@ def admin_reservation():
 
     res_slot_form = ReserveSlotForm()
     if res_slot_form.validate_on_submit():
-        db.session.add_all(get_reservation_slots(year, next_month))
+        tables = Table.query.all()
+        db.session.add_all(
+            [
+                Reservation(**res)
+                for res in get_reservation_slots(
+                    year=year, month=next_month, tables=tables
+                )
+            ]
+        )
         db.session.commit()
         return redirect(url_for("main.admin_reservation"))
 

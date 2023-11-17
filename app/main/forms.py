@@ -16,7 +16,7 @@ class ReservedForm(FlaskForm):
 
 class ReservationForm(FlaskForm):
     reserve_date = DateField("Reserve date", format="%Y-%m-%d")
-    reserved_statuses = FieldList(FormField(ReservedForm))
+    slot_reserved_statuses = FieldList(FormField(ReservedForm))
     submit = SubmitField("Reserve Tables")
 
 

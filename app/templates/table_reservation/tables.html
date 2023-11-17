@@ -19,46 +19,49 @@
 
         {{ wtf.form_field(res_form.submit) }}
 
+        {% set ns = namespace(res_idx=0) %}
+        {% for slot, reservations in slot_reserves.items()%}
 
-        {% for slot in slots%}
+            <h2>Slot {{slot}}</h2>
 
-        <h2>Slot __</h2>
-
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Table #</th>
-                    <th scope="col">Seat capacity</th>
-                    <th scope="col">Time slot</th>
-                    <th scope="col">Reservation Status</th>
-                    <th scope="col">Reserved by</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for field in res_form.reserved_statuses %}
-                {% set res = slot[loop.index0]%}
-                <tr>
-                    <td>{{ res.table_no }}</td>
-                    <td>{{ res.seat_capacity }}</td>
-                    <td>{{ res.reservation_time_slot}}</td>
-                    <td>{{ res.reservation_status }}</td>
-                    <td>{{ res.reserved_by }}</td>
-                    <td>
-                        {{field()}}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Table #</th>
+                        <th scope="col">Seat capacity</th>
+                        <th scope="col">Time slot</th>
+                        <th scope="col">Reservation Status</th>
+                        <th scope="col">Reserved by</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in reservations %}                    
+                        {% set field = res_form.slot_reserved_statuses[ns.res_idx] %}
+                        <tr>
+                            <td>{{ res.table_no }}</td>
+                            <td>{{ res.seat_capacity }}</td>
+                            <td>{{ res.reservation_time_slot}}</td>
+                            <td>{{ res.reservation_status }}</td>
+                            <td>{{ res.reserved_by }}</td>
+                            <td>
+                                {{field()}}
+                            </td>
+                        </tr>
+                        {% set ns.res_idx = ns.res_idx + 1 %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            
         {% endfor %}
 </div>
 </form>
 <script>
-    document.getElementById('reserve_date').addEventListener('change', function () {
-        // Reload the page when the date input changes
-        console.log(window.location);
-        window.location.reload();
+    document.getElementById('reserve_date').addEventListener('change', function (event) {
+        // Reload the page when the date input changes res_form.slot_reserved_statuses
+        let href = window.location.href;
+        let last_eq_index = href.lastIndexOf('=');
+        window.location = href.substring(0, last_eq_index) + '=' + event.target.value;
     });
 </script>
 {% endblock %}

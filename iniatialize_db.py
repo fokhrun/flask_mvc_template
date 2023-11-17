@@ -1,14 +1,14 @@
 
-from datetime import date
 import os
-from flask_migrate import Migrate
+from datetime import date
 from calendar import monthrange
 from itertools import product
+from flask_migrate import Migrate, upgrade
 from app import db, create_app
 from app.models import User, Role, Table, Reservation, ReservationSlot
-from flask_migrate import upgrade
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+
+app = create_app(os.getenv("FLASK_CONFIG"))
 migrate = Migrate(app, db)
 
 """
@@ -22,6 +22,7 @@ flask db downgrade
 """
 
 with app.app_context():
+    print (db)
     upgrade()
 
     db.drop_all()
