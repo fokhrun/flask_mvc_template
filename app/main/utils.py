@@ -1,3 +1,4 @@
+"""Utility functions for the admin routes"""
 
 from datetime import date
 from itertools import product
@@ -18,7 +19,7 @@ def get_reservation_slots(year, month, tables):
     Returns
     -------
     list[dict]
-        list of reservation slots
+        reservation slots
     """
     _, num_days = monthrange(year, month)
     days = [date(year, month, day) for day in range(1, num_days + 1)]
@@ -51,4 +52,3 @@ def get_next_month_year(current_date):
     next_month = next_month_date.month
     next_year = next_month_date.year
     return next_year, next_month
-
