@@ -3,6 +3,7 @@
 www.spicemagic.com is a website for the restaurant named Spice Magic. It provides information on what the restaurant offers and allows guests to reserve tables.
 
 # Requirements
+
 ## Functional requirements
 
 The site supports three types of users:
@@ -36,3 +37,12 @@ The site has the following pages:
         - remove any existing type of tables
         - create any new reservation slot
         - remove any existing reservation slot
+
+
+## Tecnical Requirements
+
+### High-level tech stack
+
+- Front End: [Bootstrap Framework](https://getbootstrap.com/docs/5.3/getting-started/introduction/) (HTML, CSS, Javascript)
+- Back End: [Flask Framework](https://flask.palletsprojects.com/en/3.0.x/) (Python)
+- Database: [MySQL](https://dev.mysql.com/doc/refman/8.0/en/introduction.html)
