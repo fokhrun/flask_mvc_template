@@ -1,18 +1,21 @@
 # Spice Magic
 
-www.spicemagic.com is a website for the restaurant named Spice Magic. It provides information on what the restaurant offers and allows guests to reserve tables.
-
+![Spice Magic](https://restaurant-binita-99be9591d7d4.herokuapp.com/) is a full stack restaurant website. The site provides 
+- the site guests to see the restaurant menu
+- the site owner to manage reservations for its restaurant guests through a centrally managed reservation database
+- The site provides a role-based management of reservation database
+zzzz
 # Requirements
 
 ## Functional requirements
 
 The site supports three types of users:
-- `visitor`: can visit publicly available pages, any one who landed in the site
+- `visitor`: can visit publicly available pages, anyone who landed in the site
 - `guest`: can reserve tables in the restaurant on his own
 - `admin`: 
     - can create reservation slots 
-    - can cancel anyone's reservation
-    - can book reservation on behalf of any restaurant customer 
+    - can cancel anyone's reservation (to handle unforeseeable situations)
+    - can book reservation on behalf of any restaurant customer (offline booking)
 
 The site has the following pages: 
 1. `home`: provides information about the restaurant, such as cousine, menu, serving hours, contact, etc., for any site visitors
@@ -27,6 +30,8 @@ The site has the following pages:
         - make reservations for any available time for any number of guests within the next two weeks from today
             - can add a remark about reservations
         - cancel already made reservations
+        - cannot reserve table reserved by someone else
+
     2. `admin` can 
         - view any reservations status of any table made by anyone
         - make reservations for anyone
@@ -46,3 +51,7 @@ The site has the following pages:
 - Front End: [Bootstrap Framework](https://getbootstrap.com/docs/5.3/getting-started/introduction/) (HTML, CSS, Javascript)
 - Back End: [Flask Framework](https://flask.palletsprojects.com/en/3.0.x/) (Python)
 - Database: [MySQL](https://dev.mysql.com/doc/refman/8.0/en/introduction.html)
+
+### High-level architecture
+
+

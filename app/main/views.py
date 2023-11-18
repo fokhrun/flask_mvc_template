@@ -15,7 +15,6 @@ from datetime import datetime
 
 
 @main.route("/")
-@main.route("/home")
 def index():
     """Renders HTML template for the home page"""
     return render_template("index.html")
@@ -186,7 +185,7 @@ def admin_reservation():
         return redirect(url_for("main.admin_reservation"))
 
     return render_template(
-        "admin.html",
+        "table_reservation/admin.html",
         res_slot_form=res_slot_form,
         res_so_far_from=res_so_far_from,
         res_so_far_to=res_so_far_to,
