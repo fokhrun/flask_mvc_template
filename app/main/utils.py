@@ -2,6 +2,7 @@
 from datetime import date
 from itertools import product
 from calendar import monthrange
+from dateutil.relativedelta import relativedelta
 from ..models import ReservationSlot
 
 
@@ -32,3 +33,22 @@ def get_reservation_slots(year, month, tables):
     ]
 
     return reservation_slots
+
+
+def get_next_month_year(current_date):
+    """Calculate next month and year from a given date
+
+    Parameters
+    ----------
+    current_date : datetime.date
+
+    Returns
+    -------
+        next_year : int
+        next_month : int
+    """
+    next_month_date = current_date + relativedelta(months=1)
+    next_month = next_month_date.month
+    next_year = next_month_date.year
+    return next_year, next_month
+

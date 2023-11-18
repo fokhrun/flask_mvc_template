@@ -2,15 +2,13 @@
 
 from calendar import month_name
 from datetime import date, datetime
-
-from dateutil.relativedelta import relativedelta
 from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_required
 from sqlalchemy import and_, or_
 from .. import db
 from . import main
 from .forms import ReservationForm, ReserveSlotForm
-from .utils import get_reservation_slots
+from .utils import get_next_month_year, get_reservation_slots
 from ..models import User, Reservation, Table, Role
 
 
@@ -97,24 +95,6 @@ def table_reservation():
         res_form=reserve_form,
         slot_reserves=slot_reserves,
     )
-
-
-def get_next_month_year(current_date):
-    """Calculate next month and year from a given date
-
-    Parameters
-    ----------
-    current_date : datetime.date
-
-    Returns
-    -------
-        next_year : int
-        next_month : int
-    """
-    next_month_date = current_date + relativedelta(months=1)
-    next_month = next_month_date.month
-    next_year = next_month_date.year
-    return next_year, next_month
 
 
 @main.route("/admin", methods=["GET", "POST"])
