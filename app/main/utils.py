@@ -1,6 +1,6 @@
 """Utility functions for the admin routes"""
 
-from datetime import date
+from datetime import date, datetime
 from itertools import product
 from calendar import monthrange
 from dateutil.relativedelta import relativedelta
@@ -52,3 +52,22 @@ def get_next_month_year(current_date):
     next_month = next_month_date.month
     next_year = next_month_date.year
     return next_year, next_month
+
+
+def get_reservation_date(for_date):
+    """Get date to be used for reservation
+
+    Parameters
+    ----------
+    for_date : str
+        date string in the format YYYY-MM-DD or "today"
+
+    Returns
+    -------
+        datetime.date
+    """
+    if for_date == "today":
+        reservation_date = date.today()
+    else:
+        reservation_date = datetime.strptime(for_date, "%Y-%m-%d").date()
+    return reservation_date

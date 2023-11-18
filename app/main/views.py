@@ -1,14 +1,14 @@
 """Top level views for the application."""
 
 from calendar import month_name
-from datetime import date, datetime
 from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_required
 from sqlalchemy import and_, or_
 from .. import db
 from . import main
 from .forms import ReservationForm, ReserveSlotForm
-from .utils import get_next_month_year, get_reservation_slots
+from .utils import get_next_month_year, get_reservation_slots, get_reservation_date
+from .model_services import get_is_admin
 from ..models import User, Reservation, Table, Role
 
 
@@ -21,13 +21,15 @@ def index():
 @main.route("/reserve", methods=["GET", "POST"])
 @login_required
 def table_reservation():
-    for_date = request.args.get("for_date")
-    reservation_date = (
-        date.today() if for_date == "today" else datetime.strptime(for_date, "%Y-%m-%d")
-    )
+    """Main route for the table reservation
 
-    admin_role = Role.query.filter_by(name="Admin").first()
-    is_admin = current_user.role == admin_role
+    Returns
+    -------
+    flask.Response
+        HTML template for the table reservation
+    """
+    reservation_date = get_reservation_date(request.args.get("for_date"))
+    is_admin = get_is_admin(current_user)
 
     if not is_admin:
         reservations = (
@@ -36,7 +38,7 @@ def table_reservation():
                     Reservation.reservation_date == reservation_date,
                     or_(
                         Reservation.user_id == current_user.id,
-                        Reservation.reservation_status == False,
+                        Reservation.reservation_status is False,
                     ),
                 )
             )
@@ -59,7 +61,7 @@ def table_reservation():
                 reservation.user_id = current_user.id if reserved_form else None
 
         db.session.commit()
-        return redirect(url_for("main.table_reservation") +  "".join(["?for_date=", reservation_date.strftime("%Y-%m-%d")]))
+        return redirect(url_for("main.table_reservation") + "".join(["?for_date=", reservation_date.strftime("%Y-%m-%d")]))
 
     slot_reserves = {}
     slot_reserved_statuses = []
