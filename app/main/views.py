@@ -1,8 +1,8 @@
 """Top level views for the application."""
 
-from calendar import monthrange, month_name
-from datetime import date
-from itertools import product
+from calendar import month_name
+from datetime import date, datetime
+
 from dateutil.relativedelta import relativedelta
 from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_required
@@ -10,8 +10,8 @@ from sqlalchemy import and_, or_
 from .. import db
 from . import main
 from .forms import ReservationForm, ReserveSlotForm
-from ..models import User, Reservation, Table, Role, ReservationSlot
-from datetime import datetime
+from .utils import get_reservation_slots
+from ..models import User, Reservation, Table, Role
 
 
 @main.route("/")
@@ -99,35 +99,6 @@ def table_reservation():
     )
 
 
-def get_reservation_slots(year, month, tables):
-    """Generate reservation slots for a given month and year
-
-    Parameters
-    ----------
-    tables : list[Table]
-    year : int
-    month : int
-
-    Returns
-    -------
-    list[dict]
-        list of reservation slots
-    """
-    _, num_days = monthrange(year, month)
-    days = [date(year, month, day) for day in range(1, num_days + 1)]
-    reservation_slots = [
-        {
-            "reservation_slot": reservation_slot,
-            "table": table,
-            "reservation_date": date_slot,
-            "reservation_status": False,
-        }
-        for date_slot, reservation_slot, table in product(days, ReservationSlot, tables)
-    ]
-
-    return reservation_slots
-
-
 def get_next_month_year(current_date):
     """Calculate next month and year from a given date
 
@@ -173,14 +144,8 @@ def admin_reservation():
     res_slot_form = ReserveSlotForm()
     if res_slot_form.validate_on_submit():
         tables = Table.query.all()
-        db.session.add_all(
-            [
-                Reservation(**res)
-                for res in get_reservation_slots(
-                    year=year, month=next_month, tables=tables
-                )
-            ]
-        )
+        new_res = [Reservation(**res) for res in get_reservation_slots(year=year, month=next_month, tables=tables)]
+        db.session.add_all(new_res)
         db.session.commit()
         return redirect(url_for("main.admin_reservation"))
 

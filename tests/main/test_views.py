@@ -2,7 +2,8 @@
 import unittest
 from unittest import mock
 from datetime import date
-from app.main.views import get_next_month_year, get_reservation_slots
+from app.main.views import get_next_month_year
+from app.main.utils import get_reservation_slots
 from tests.utils import FlaskAppTestCase
 
 
