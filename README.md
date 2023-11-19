@@ -87,17 +87,17 @@ The site has the following pages:
 
 ## High-level architecture
 
-![High-level application architecture](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
+![High-level application architecture](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/flask_app_architecture.png)
 
 ### Wireframes for cruicial pages
 
-![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservations.png)
+![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
 
 ### Controllers
 
 ## Data model
 
-![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
+![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
 
 ### Code repository structure
 ```
