@@ -4,6 +4,7 @@ from sqlalchemy import and_, or_
 from flask_login import current_user
 from .. import db
 from ..models import User, Reservation, Table, Role
+from .utils import get_reservation_slots
 
 
 def get_is_admin(active_user):
@@ -115,3 +116,30 @@ def get_slot_information(reservations):
         slot_reserved_statuses.append({"reserved": reservation.reservation_status})
 
     return slot_reserves, slot_reserved_statuses
+
+
+def get_reservation_so_far():
+    """Get reservation date range for the admin reservation
+
+    Returns
+    -------
+        tuple(datetime.date, datetime.date)
+    """
+    res_so_far_from = Reservation.query.order_by(Reservation.reservation_date).first().reservation_date
+    res_so_far_to = Reservation.query.order_by(Reservation.reservation_date.desc()).first().reservation_date
+
+    return res_so_far_from, res_so_far_to
+
+
+def create_new_reservation_slots(year, next_month):
+    """Create new reservation slots for the next month
+
+    Parameters
+    ----------
+    year : int
+    next_month : int
+    """
+    db.session.add_all([
+        Reservation(**res) for res in get_reservation_slots(year=year, month=next_month, tables=Table.query.all())
+    ])
+    db.session.commit()

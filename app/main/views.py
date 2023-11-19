@@ -1,20 +1,26 @@
 """Top level views for the application."""
 
 from calendar import month_name
-from datetime import date
 from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_required
-from .. import db
 from . import main
 from .forms import ReservationForm, ReserveSlotForm
-from .utils import get_next_month_year, get_reservation_slots, get_reservation_date
-from .model_services import get_reservations, update_reservation, get_slot_information
-from ..models import Reservation, Table, Role
+from .utils import get_next_month_year, get_reservation_date
+from .model_services import (
+    create_new_reservation_slots, get_is_admin, get_reservations, update_reservation, get_slot_information,
+    get_reservation_so_far
+)
 
 
 @main.route("/")
 def index():
-    """Renders HTML template for the home page"""
+    """Renders HTML template for the home page
+
+    Returns
+    -------
+    flask.Response
+        HTML template for the home page
+    """
     return render_template("index.html")
 
 
@@ -47,33 +53,24 @@ def table_reservation():
 @main.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin_reservation():
-    admin_role = Role.query.filter_by(name="Admin").first()
-    is_admin = current_user.role == admin_role
+    """Main route for the admin reservation
+
+    Returns
+    -------
+    flask.Response
+        HTML template for the admin reservation
+    """
+
+    is_admin = get_is_admin(current_user)
     if not is_admin:
         return redirect(url_for("main.home"))
-    res_so_far = sorted(
-        list(
-            set(
-                [
-                    reservation.reservation_date
-                    for reservation in Reservation.query.filter(
-                        Reservation.reservation_date >= date.today()
-                    ).all()
-                ]
-            )
-        )
-    )
 
-    res_so_far_from, *_, res_so_far_to = res_so_far
-
+    res_so_far_from, res_so_far_to = get_reservation_so_far()
     year, next_month = get_next_month_year(res_so_far_to)
 
     res_slot_form = ReserveSlotForm()
     if res_slot_form.validate_on_submit():
-        tables = Table.query.all()
-        new_res = [Reservation(**res) for res in get_reservation_slots(year=year, month=next_month, tables=tables)]
-        db.session.add_all(new_res)
-        db.session.commit()
+        create_new_reservation_slots(year, next_month)
         return redirect(url_for("main.admin_reservation"))
 
     return render_template(
