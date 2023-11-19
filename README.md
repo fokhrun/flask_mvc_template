@@ -91,13 +91,13 @@ The site has the following pages:
 
 ### Wireframes for cruicial pages
 
-![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
+![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservations.png)
 
 ### Controllers
 
 ## Data model
 
-![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservatione.png)
+![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
 
 ### Code repository structure
 ```
