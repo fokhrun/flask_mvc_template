@@ -74,7 +74,7 @@ class Reservation(db.Model):
     reservation_time_slot = db.Column(db.Enum(ReservationSlot), nullable=False)
     reservation_date = db.Column(db.Date, nullable=False)
     reservation_status = db.Column(db.Boolean, nullable=False, default=False)
-    
+
     def get_status_string(self):
         return "reserved" if self.reservation_status else "unreserved"
 
