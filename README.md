@@ -56,7 +56,7 @@ The site has the following pages:
 
 ### Data model
 
-![Data Model]("https://github.com/fokhrun/restaurant_reservation/blob/main/docs/images/data_model.png")
+![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/docs/images/data_model.png)
 
 
 #### Password Management
