@@ -8,8 +8,8 @@ from .. import db
 from . import main
 from .forms import ReservationForm, ReserveSlotForm
 from .utils import get_next_month_year, get_reservation_slots, get_reservation_date
-from .model_services import get_is_admin, get_reservations
-from ..models import User, Reservation, Table, Role
+from .model_services import get_reservations, update_reservation, get_slot_information
+from ..models import Reservation, Table, Role
 
 
 @main.route("/")
@@ -30,57 +30,18 @@ def table_reservation():
     """
     reservation_date = get_reservation_date(request.args.get("for_date"))
 
-    reservations = get_reservations(
-        is_admin=get_is_admin(current_user),
-        reservation_date=reservation_date,
-        current_user=current_user
-    )
+    reservations = get_reservations(reservation_date=reservation_date, user=current_user)
 
+    # TODO: Add a flash message for the user
     res_form = ReservationForm()
     if res_form.validate_on_submit():
-        for idx, reservation in enumerate(reservations):
-            reserved_form = res_form.slot_reserved_statuses.data[idx]["reserved"]
-            if reservation.reservation_status is not reserved_form:
-                reservation.reservation_status = reserved_form
-                reservation.user_id = current_user.id if reserved_form else None
+        update_reservation(reservations=reservations, slot_reserved_statuses=res_form.slot_reserved_statuses.data)
+        return redirect(f"{url_for('main.table_reservation')}?for_date={reservation_date.strftime('%Y-%m-%d')}")
 
-        db.session.commit()
-        return redirect(url_for("main.table_reservation") + "".join(["?for_date=", reservation_date.strftime("%Y-%m-%d")]))
+    slot_reserves, slot_reserved_statuses = get_slot_information(reservations)
+    reserve_form = ReservationForm(reserve_date=reservation_date, slot_reserved_statuses=slot_reserved_statuses)
 
-    slot_reserves = {}
-    slot_reserved_statuses = []
-    table_capacities = {
-        table.id: table.table_capacity.value for table in Table.query.all()
-    }
-    users = {user.id: user.username for user in User.query.all()}
-
-    for reservation in reservations:
-        reservation_time_slot = reservation.reservation_time_slot.name.capitalize()
-        table_reserved = {
-            "table_no": reservation.table_id,
-            "seat_capacity": table_capacities[reservation.table_id],
-            "reservation_time_slot": reservation_time_slot,
-            "reservation_status": reservation.get_status_string().capitalize(),
-            "reserved_by": users[reservation.user_id] if reservation.user_id else "",
-        }
-
-        if reservation_time_slot in slot_reserves:
-            slot_reserves[reservation_time_slot].append(table_reserved)            
-        else:
-            slot_reserves[reservation_time_slot] = [table_reserved]
-        
-        slot_reserved_statuses.append(
-                {"reserved": reservation.reservation_status}
-            )
-
-    reserve_form = ReservationForm(
-        reserve_date=reservation_date, slot_reserved_statuses=slot_reserved_statuses
-    )
-    return render_template(
-        "table_reservation/tables.html",
-        res_form=reserve_form,
-        slot_reserves=slot_reserves,
-    )
+    return render_template("table_reservation/tables.html", res_form=reserve_form, slot_reserves=slot_reserves)
 
 
 @main.route("/admin", methods=["GET", "POST"])
