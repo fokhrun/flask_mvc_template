@@ -1,6 +1,6 @@
 # Spice Magic
 
-![Spice Magic](https://restaurant-binita-99be9591d7d4.herokuapp.com/) is a full stack restaurant website. The site provides 
+[Spice Magic](https://restaurant-binita-99be9591d7d4.herokuapp.com/) is a full stack restaurant website. The site provides 
 - the site guests to see the restaurant menu
 - the site owner to manage reservations for its restaurant guests through a centrally managed reservation database
 - The site provides a role-based management of reservation database
@@ -44,7 +44,7 @@ The site has the following pages:
         - remove any existing reservation slot
 
 
-## Tecnical Requirements
+## Tecnical Design
 
 ### High-level tech stack
 
@@ -54,4 +54,25 @@ The site has the following pages:
 
 ### High-level architecture
 
+### Data model
 
+![Data Model]("https://github.com/fokhrun/restaurant_reservation/docs/images/data_model.png")
+
+
+#### Password Management
+
+#### Current User
+
+# Future improvements
+
+## Model
+- must
+    - User
+        - validation for `email` to be actual email address
+- should
+    - User
+        - make `role` non-nullable
+- could
+    - User
+
+    -   
