@@ -32,6 +32,7 @@ class TestConfig(Config):
 
     TESTING = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    WTF_CSRF_ENABLED = False
 
     SQLALCHEMY_DATABASE_URI = (
         "mysql://"
