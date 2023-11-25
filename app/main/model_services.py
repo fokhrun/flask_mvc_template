@@ -1,11 +1,11 @@
 """Service that handles all the business logic that uses the models"""
 
+from collections import OrderedDict
 from sqlalchemy import and_, or_
 from flask_login import current_user
 from .. import db
 from ..models import User, Reservation, Table, Role
 from .utils import get_reservation_slots
-from collections import OrderedDict
 
 
 def get_is_admin(active_user):
@@ -50,8 +50,9 @@ def get_reservations(reservation_date, user):
         get_non_reserved_today = and_(
             Reservation.reservation_date == reservation_date,
             or_(
-                Reservation.user_id == user.id, Reservation.reservation_status == False
-            ),  # noqa: E712
+                Reservation.user_id == user.id,
+                Reservation.reservation_status == False  # noqa: E712
+            ),  
         )
         reservations = Reservation.query.filter(get_non_reserved_today)
 
