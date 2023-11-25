@@ -2,8 +2,28 @@
 
 {% block title %}Restaurant Reservation{% endblock %}
 
+
 {% block page_content %}
-<div class="page-header">
-    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+
+<div class="container-xxl position-relative p-0">
+    <div class="container-xxl py-2 bg-dark hero-header mb-2">
+        <div class="container my-2 py-2">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-3 text-white animated slideInLeft">Enjoy Our<br>Delicious Meal</h1>
+                    <p class="text-white animated slideInLeft mb-4 pb-2">
+                        Indulge in a Symphony of Flavors: Dive into a rich culinary journey that explores the diverse 
+                        and exquisite flavors of India. From the robust spices of the North to the tangy and spicy 
+                        delights of the South, every dish is a melody of flavors waiting to serenade your senses.</p>
+                    <a href="{{ url_for('main.table_reservation') }}?for_date=today" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Book A Table</a>
+                </div>
+                <div class="col-lg-6 text-center text-lg-end overflow-hidden">
+                    <img class="img-fluid" src="{{ url_for('static', filename='images/front_image.jpg') }}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
+
+pexels-chan-walrus-958545.jpg
