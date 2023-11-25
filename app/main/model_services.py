@@ -5,6 +5,7 @@ from flask_login import current_user
 from .. import db
 from ..models import User, Reservation, Table, Role
 from .utils import get_reservation_slots
+from collections import OrderedDict
 
 
 def get_is_admin(active_user):
@@ -42,11 +43,15 @@ def get_reservations(reservation_date, user):
         list[Reservation]
     """
     if get_is_admin(user):
-        reservations = Reservation.query.filter(Reservation.reservation_date == reservation_date)
+        reservations = Reservation.query.filter(
+            Reservation.reservation_date == reservation_date
+        )
     else:
         get_non_reserved_today = and_(
             Reservation.reservation_date == reservation_date,
-            or_(Reservation.user_id == user.id, Reservation.reservation_status == False)  # noqa: E712
+            or_(
+                Reservation.user_id == user.id, Reservation.reservation_status == False
+            ),  # noqa: E712
         )
         reservations = Reservation.query.filter(get_non_reserved_today)
 
@@ -69,7 +74,7 @@ def update_reservation(reservations, slot_reserved_statuses):
         True if reservation is updated, False otherwise
     """
     for idx, reservation in enumerate(reservations):
-        reserved_form = slot_reserved_statuses[idx]["reserved"]
+        reserved_form = slot_reserved_statuses[idx]['reserved']
         if reservation.reservation_status is not reserved_form:
             reservation.reservation_status = reserved_form
             reservation.user_id = current_user.id if reserved_form else None
@@ -83,7 +88,7 @@ def get_slot_information(reservations):
     Parameters
     ----------
     reservations : list[Reservation]
-         
+
 
     Returns
     -------
@@ -93,9 +98,11 @@ def get_slot_information(reservations):
         slot_reserved_statuses : list[dict]
             List of reservation statuses for a given time slot
     """
-    slot_reserves = {}
+    slot_reserves = OrderedDict()
     slot_reserved_statuses = []
-    table_capacities = {table.id: table.table_capacity.value for table in Table.query.all()}
+    table_capacities = {
+        table.id: table.table_capacity.value for table in Table.query.all()
+    }
     users = {user.id: user.username for user in User.query.all()}
 
     for reservation in reservations:
@@ -125,8 +132,16 @@ def get_reservation_so_far():
     -------
         tuple(datetime.date, datetime.date)
     """
-    res_so_far_from = Reservation.query.order_by(Reservation.reservation_date).first().reservation_date
-    res_so_far_to = Reservation.query.order_by(Reservation.reservation_date.desc()).first().reservation_date
+    res_so_far_from = (
+        Reservation.query.order_by(Reservation.reservation_date)
+        .first()
+        .reservation_date
+    )
+    res_so_far_to = (
+        Reservation.query.order_by(Reservation.reservation_date.desc())
+        .first()
+        .reservation_date
+    )
 
     return res_so_far_from, res_so_far_to
 
@@ -139,7 +154,12 @@ def create_new_reservation_slots(year, next_month):
     year : int
     next_month : int
     """
-    db.session.add_all([
-        Reservation(**res) for res in get_reservation_slots(year=year, month=next_month, tables=Table.query.all())
-    ])
+    db.session.add_all(
+        [
+            Reservation(**res)
+            for res in get_reservation_slots(
+                year=year, month=next_month, tables=Table.query.all()
+            )
+        ]
+    )
     db.session.commit()
