@@ -1,61 +1,60 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Table reservation{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Table reservation for {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}''{% endif %}
-    </h1>
+    <h3>Table reservation for {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}''{% endif %}
+    </h3>
 </div>
 
-<div class="">
-    <form class="form"
-          method="POST">
 
-        {{ res_form.hidden_tag() }}
+<form class="form"
+      method="POST">
 
-        {{ wtf.form_field(res_form.reserve_date) }}
+    {{ res_form.hidden_tag() }}
 
-        {{ wtf.form_field(res_form.submit) }}
+    <div class="d-flex justify-content-end">
+        <div class="align-self-end d-flex">
+            {{ res_form.reserve_date(class="form-control", id="reserve_date") }}
+            {{ res_form.submit(class="btn btn-primary ml-3") }}
+        </div>  
+    </div>
 
-        {% set ns = namespace(res_idx=0) %}
-        {% for slot, reservations in slot_reserves.items()%}
-
-            <h2>Slot {{slot}}</h2>
-
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Table #</th>
-                        <th scope="col">Seat capacity</th>
-                        <th scope="col">Time slot</th>
-                        <th scope="col">Reservation Status</th>
-                        <th scope="col">Reserved by</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for res in reservations %}                    
-                        {% set field = res_form.slot_reserved_statuses[ns.res_idx] %}
-                        <tr>
-                            <td>{{ res.table_no }}</td>
-                            <td>{{ res.seat_capacity }}</td>
-                            <td>{{ res.reservation_time_slot}}</td>
-                            <td>{{ res.reservation_status }}</td>
-                            <td>{{ res.reserved_by }}</td>
-                            <td>
-                                {{field()}}
-                            </td>
-                        </tr>
-                        {% set ns.res_idx = ns.res_idx + 1 %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            
-        {% endfor %}
-</div>
+    {% set ns = namespace(res_idx=0) %}
+    {% for slot, reservations in slot_reserves.items()%}
+    <div>
+        <h4>Slot: <strong>{{slot}}</strong></h4>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Table #</th>
+                    <th scope="col">Seat capacity</th>
+                    <th scope="col">Reservation Status</th>
+                    <th scope="col">Reserved by</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in reservations %}
+                {% set field = res_form.slot_reserved_statuses[ns.res_idx] %}
+                <tr>
+                    <td>{{ res.table_no }}</td>
+                    <td>{{ res.seat_capacity }}</td>
+                    <td>{{ res.reservation_status }}</td>
+                    <td>{{ res.reserved_by }}</td>
+                    <td>
+                        {{field()}}
+                    </td>
+                </tr>
+                {% set ns.res_idx = ns.res_idx + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
 </form>
+
 <script>
     document.getElementById('reserve_date').addEventListener('change', function (event) {
         // Reload the page when the date input changes res_form.slot_reserved_statuses

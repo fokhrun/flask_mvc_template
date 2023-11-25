@@ -1,69 +1,101 @@
-{% extends "bootstrap/base.html" %}
+<!doctype html>
+<html lang="en">
 
-{% block title %}Restaurant Reservation{% endblock %}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% block head %}
-{{ super() }}
-<link rel="shortcut icon"
-      href="{{ url_for('static', filename='favicon.ico') }}"
-      type="image/x-icon">
-<link rel="icon"
-      href="{{ url_for('static', filename='favicon.ico') }}"
-      type="image/x-icon">
-{% endblock %}
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+          crossorigin="anonymous"> -->
 
-{% block navbar %}
-<div class="navbar navbar-inverse"
-     role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button"
-                    class="navbar-toggle"
-                    data-toggle="collapse"
-                    data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+    <link rel="stylesheet"
+          type="text/css"
+          href="{{ url_for('static', filename='css/main.css') }}">
+
+    <title>{% block title %}Restaurant Reservation{% endblock %}</title>
+</head>
+
+<body>
+    {% block nav_bar %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
             <a class="navbar-brand"
-               href="{{ url_for('main.index') }}">Restaurant Reservation</a>
+               href="{{ url_for('main.index') }}">Restaurant</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse"
+                 id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item {{'active' if request.path == url_for('main.table_reservation') else ''}}">
+                        <a class="nav-link"
+                           href="{{ url_for('main.table_reservation') }}?for_date=today">Reserve</a>
+                    </li>
+                    {% if current_user.role and current_user.role.name == 'Admin' %}
+                    <li class="nav-item {{'active' if request.path == url_for('main.admin_reservation') else ''}}">
+                        <a class="nav-link"
+                           href="{{ url_for('main.admin_reservation') }}">Admin</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a class="nav-link {{'active' if request.path == url_for('auth.logout') else ''}}"
+                           href="{{ url_for('auth.logout') }}">Log Out ({{current_user.username}})</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {{'active' if request.path == url_for('auth.login') else ''}}"
+                           href="{{ url_for('auth.login') }}">Log In</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
         </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('main.table_reservation') }}?for_date=today">Reserve</a></li>
-                {% if current_user.role and current_user.role.name == 'Admin' %}
-                <li><a href="{{ url_for('main.admin_reservation') }}">Admin</a></li>
-                {% endif %}
-            </ul>
+    </nav>
 
-            <ul class="nav navbar-nav navbar-right">
-                {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-                {% else %}
-                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-                {% endif %}
-            </ul>
+    {% endblock %}
+
+    {% block content %}
+    <div class="container py-3">
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button"
+                    class="close"
+                    data-dismiss="alert">&times;</button>
+            {{ message }}
         </div>
+        {% endfor %}
+
+        {% block page_content %}
+
+        {% endblock %}
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
-{% block content %}
-<div class="container">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button"
-                class="close"
-                data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
-    {% endfor %}
 
-    {% block page_content %}{% endblock %}
-</div>
-{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            crossorigin="anonymous"></script>
 
-{% block scripts %}
-{{ super() }}
-{% endblock %}
+</body>
+
+</html>
