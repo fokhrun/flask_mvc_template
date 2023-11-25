@@ -37,4 +37,4 @@ class ReserveSlotForm(FlaskForm):
     """
     reserve_from_date = DateField("From date", format="%Y-%m-%d")
     reserve_to_date = DateField("To date", format="%Y-%m-%d")
-    submit = SubmitField("Create slot tables")
+    submit = SubmitField("Create Reservation Slots")
