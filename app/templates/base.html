@@ -26,8 +26,6 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand"
-               href="{{ url_for('main.index') }}">Spice Magic</a>
             <button class="navbar-toggler"
                     type="button"
                     data-toggle="collapse"
@@ -41,26 +39,31 @@
             <div class="collapse navbar-collapse"
                  id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
+                    <li class="nav-item}}">
+                        <a class="navbar-brand" href="{{ url_for('main.index') }}">Spice Magic</a>
+                    </li>
+                    <li class="nav-item}}">
+                        <a class="navbar-brand" href="{{ url_for('main.menu') }}">Menu</a>
+                    </li>
                     <li class="nav-item {{'active' if request.path == url_for('main.table_reservation') else ''}}">
-                        <a class="nav-link"
-                           href="{{ url_for('main.table_reservation') }}?for_date=today">Reserve</a>
+                        <a class="navbar-brand" href="{{ url_for('main.table_reservation') }}?for_date=today">Reserve</a>
                     </li>
                     {% if current_user.role and current_user.role.name == 'Admin' %}
                     <li class="nav-item {{'active' if request.path == url_for('main.admin_reservation') else ''}}">
-                        <a class="nav-link"
-                           href="{{ url_for('main.admin_reservation') }}">Admin</a>
+                        <a class="navbar-brand" href="{{ url_for('main.admin_reservation') }}">Admin</a>
                     </li>
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     {% if current_user.is_authenticated %}
                     <li class="nav-item active">
-                        <a class="nav-link {{'active' if request.path == url_for('auth.logout') else ''}}"
-                           href="{{ url_for('auth.logout') }}">Log Out ({{current_user.username}})</a>
+                        <a class="nav-brand {{'active' if request.path == url_for('auth.logout') else ''}}"
+                           href="{{ url_for('auth.logout') }}"><b>{{current_user.username.capitalize()}}   </b>Log Out</a>
                     </li>
+
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link {{'active' if request.path == url_for('auth.login') else ''}}"
+                        <a class="nav-brand {{'active' if request.path == url_for('auth.login') else ''}}"
                            href="{{ url_for('auth.login') }}">Log In</a>
                     </li>
                     {% endif %}

@@ -24,6 +24,18 @@ def index():
     return render_template("index.html")
 
 
+@main.route("/menu")
+def menu():
+    """Renders HTML template for the home page
+
+    Returns
+    -------
+    flask.Response
+        HTML template for the menu page
+    """
+    return render_template("menu.html")
+
+
 @main.route("/reserve", methods=["GET", "POST"])
 @login_required
 def table_reservation():
