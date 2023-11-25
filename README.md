@@ -288,3 +288,16 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 - Run `flask test`
 
 ### Test cases
+
+# Credits
+
+## Images
+
+Photos by:
+1. Chan Walrus: 
+    - [front_image.jpg](https://www.pexels.com/photo/white-and-brown-cooked-dish-on-white-ceramic-bowls-958545/)
+    - [about_3.jpg](https://www.pexels.com/photo/platter-of-foods-941869/)
+2. Shantanu Pal: [about_11.jpg](https://www.pexels.com/photo/cooked-food-in-bow-2679501/)
+3. Marvin Ozz: [about_2.jpg](https://www.pexels.com/photo/close-up-photo-of-fried-food-on-saucer-2474658/)
+4. Gagan Kaur: [about_4.jpg](https://www.pexels.com/photo/a-woman-cooking-indian-food-3531700/)
+5. [Mareefe]: [about_5.jpg](https://www.pexels.com/photo/three-condiments-in-plastic-containers-674483/)
