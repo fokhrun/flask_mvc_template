@@ -45,9 +45,9 @@ def table_reservation():
         return redirect(f"{url_for('main.table_reservation')}?for_date={reservation_date.strftime('%Y-%m-%d')}")
 
     slot_reserves, slot_reserved_statuses = get_slot_information(reservations)
-    reserve_form = ReservationForm(reserve_date=reservation_date, slot_reserved_statuses=slot_reserved_statuses)
+    res_form = ReservationForm(reserve_date=reservation_date, slot_reserved_statuses=slot_reserved_statuses)
 
-    return render_template("table_reservation/tables.html", res_form=reserve_form, slot_reserves=slot_reserves)
+    return render_template("table_reservation/tables.html", res_form=res_form, slot_reserves=slot_reserves)
 
 
 @main.route("/admin", methods=["GET", "POST"])
