@@ -224,12 +224,67 @@ Here's an example configuration for debugging a Flask app in VSCode:
 
 - This setup will allow you to debug your Flask app by running it in debug mode within VSCode.
 
+## Working with styling
+
+This project leverages `bootstrap` for default themse and `node-sass` for custom themse for styling. Working with the both locally using `npm`, which requires `node.js`. 
+Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages in locally. It requires defining a `package.json` file 
+where version of the libraties are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which
+should be include in the `.gitignore` folder.  
+
+
+### Working with ready to use theme
+
+To start leveraging ready made themse, we mainly work using `bootstrap`. In this project, we are working with `bootstrap@4.5`. To install `bootstrap`, run the following command: 
+
+```
+npm install bootstrap
+```
+
+To work with bootstrap, just have to copy-paste the following stylesheet <link> into the <head> of `base.html`, which is used in all other html files.
+
+```
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+```
+
+### Working with custom theme
+
+We may want to influence coloring theme in a more custom manner than what `bootstrap` provides. A very good way to do it is using [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like 
+`node-sass` to compile `SCSS` files into `CSS`. To install `node-sass`, run the following command:
+
+```
+npm install node-sass  
+```
+
+To add global `SCSS` in a `Flask` application, we need to compile the SCSS files into CSS files. To do that, carry out the following steps:
+
+- Create a directory name `static` in the `app` folder, if it doesn't exist already
+- Inside the `static` directory, create a `scss` directory and a `css` directory
+- Put the global SCSS file named `main.scss` in the `scss` directory. For example, the following main.scss file overrides the theme color of the site
+    ```
+    @import "theme_color";
+    @import "./node_modules/bootstrap/scss/bootstrap";
+    ```
+    Here the `theme_color` is an another scss file where the theme colors are defined. 
+
+- Compile the SCSS file into a CSS file using node-sass:
+
+```
+node-sass app/static/scss/main.scss app/static/css/main.css
+```
+
+- To use the `main.css` overriding bootstrap themes, link to the it using the url_for function. This line should be placed inside the <head> tag of `base.html`.
+
+Here's an example of to do this in a Jinja2 template:
+
+```
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+```
+
+Note that every time there is a change in the SCSS files, we need to recompile them into CSS.
+
 ## Testing
 
 - Add test codes in `tests` folder
 - Run `flask test`
 
 ### Test cases
-
-
-
