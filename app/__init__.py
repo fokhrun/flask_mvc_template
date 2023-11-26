@@ -1,32 +1,40 @@
+""" This file is the application package constructor"""
+
 from flask import Flask
-from flask_mail import Mail
-from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import config
 
-mail = Mail()
-moment = Moment()
-db = SQLAlchemy()
 
-login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
+db = SQLAlchemy()  # Database object
+login_manager = LoginManager()  # Login manager object
+login_manager.login_view = 'auth.login'  # Set the login view
 
 
 def create_app(config_name):
-    app = Flask(__name__)
-    app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
+    """Create an application instance
 
-    mail.init_app(app)
-    moment.init_app(app)
-    db.init_app(app)
-    login_manager.init_app(app)
+    Parameters
+    ----------
+    config_name : str
+        Name of the configuration to use
 
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    Returns
+    -------
+    app : Flask
+        The application instance
+    """
+    app = Flask(__name__)  # Create a new application instance
+    app.config.from_object(config[config_name])  # Load the configuration
+    config[config_name].init_app(app)  # Initialize the application with the configuration values
 
-    from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    db.init_app(app)  # Initialize the database object with app context
+    login_manager.init_app(app)  # Initialize the login manager object with app context
+
+    from .main import main as main_blueprint  # noqa: E402
+    app.register_blueprint(main_blueprint)  # Register the routes in main/views.py
+
+    from .auth import auth as auth_blueprint  # noqa: E402
+    app.register_blueprint(auth_blueprint, url_prefix="/auth")  # Register the routes in auth/views.py
 
     return app
