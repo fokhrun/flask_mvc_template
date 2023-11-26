@@ -338,7 +338,11 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
 5. Download and install MySQL v8.0.35 or upwards from `https://dev.mysql.com/downloads/installer/`
 6. Setup a database `restaurant_dev`
 7. Make a copy of `.env_template` as `.env` and fill in the missing valuesg
-8. Initialize the database with right tables and their starter values by running `python .\iniatialize_db.py` 
+8. Initialize the database with right tables and their starter values by running `python .\iniatialize_db.py`. It creates 
+    - 2 roles: `Admin` and `Guests`
+    - 3 users: 1 `Admin` type and 2 `Guests` type
+    - 6 tables of different capacitites
+    - 6 (table) * 2 (slot per day) * 30 (days for November 2023) to create all reservation slots for November
 9. Run the app `flask run --debug`
 10. You can use `VSCode` as an editor
 
@@ -377,11 +381,8 @@ Here's an example configuration for debugging a Flask app in VSCode:
     ]
 }
 """
-
 - Set breakpoints in your code by clicking in the gutter area next to the line number in VSCode.
-
 - Start the debugger by pressing F5 or clicking on the debug icon in VSCode and selecting the Flask configuration you just created.
-
 - This setup will allow you to debug your Flask app by running it in debug mode within VSCode.
 
 ## Language/Library requirements
@@ -397,7 +398,6 @@ This project leverages `bootstrap` for default themse and `node-sass` for custom
 Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages in locally. It requires defining a `package.json` file 
 where version of the libraties are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which
 should be include in the `.gitignore` folder.  
-
 
 ### Working with ready to use theme
 
@@ -449,12 +449,63 @@ Here's an example of to do this in a Jinja2 template:
 
 Note that every time there is a change in the SCSS files, we need to recompile them into CSS.
 
-## Testing
+## Testing using Flask (unittest)
 
 - Add test codes in `tests` folder
 - Run `flask test`
 
 ### Test cases
+
+## Deployment to Heroku
+
+### Preparation
+- runtime.txt: `Python` run time version
+    - `python-3.11.6`
+- procfile: app exposed as `wsgi.py` with run command using `Gunicorn`
+    - `web: gunicorn wsgi:app` 
+- requirement.txt: Python dependencies
+    - manually crafted or run `pip freeze > requirements.txt` in the local virtualenv
+- "Eco Dynos Plan" in Heroku
+- GitHub account connected to Heroku for free tier
+- 
+
+### Steps
+- Create a new app in [Heroku](https://dashboard.heroku.com/apps)
+- Fill the form with the app name, i.e., "restaurant-binita" and "Europe" as the region
+- Click [addons](https://elements.heroku.com/addons)
+    - Click [JawsDB MySQL](https://elements.heroku.com/addons/jawsdb), Choose Kitefin Shared (for free plan) and Install
+        - You will get access to [Kitefin Server Dashboard](https://mysql.jawsdb.com/resource/dashboard) with information on 
+            - `Host`
+            - `Username`
+            - `Password`
+            - `Port`
+            - `Database`
+- Select `Settings`
+    - Add `heroku/python` build pack
+    - Add the following config vars that mimics `.env` file in the local environment
+        - `JAWSDB_URL`: `Connection String` in Kitefin Server
+        - `FLASK_CONFIG`: production
+        - `DATABASE PROD`: `Database` in Kitefin Server
+        - `DB_HOST_PROD`: `Host` in Kitefin Server
+        - `DB_PASSWORD_PROD`: `Password` in Kitefin Server
+        - `DB_PASSWORD_PROD`: `Password` in Kitefin Server
+        - `SECRET_KEY`: <chosen secret> 
+- Select `Deploy`
+    - Choose "GitHub" as deployment method
+    - Search the GitHub repo name `restaurant_reservation`. Once the repo is found, connect the repo.
+    - Choose the default branch to deploy, i.e., the `main` branch
+    - Click "Enable Automatic Deploys" which allows the app to be redeployed for every commit.
+    - Click "Deploy Branch" for the first manual push.
+- Select `Open app` to verify that the app got deployed.
+
+### Preparing production environment
+
+1. `gunicorn` is not supported in In Windows. you can use `waitress` instead. Follow these [guide](https://stackoverflow.com/questions/11087682/does-gunicorn-run-on-windows)
+2. To initialize the production database, change the `FLASK_CONFIG` to `production`
+3. run `python .\iniatialize_db.py` to create the initial roles, users, tables, and reservations
+4. Run the app by clicking the `Open App`
+5. Verify by login to the site using the newly created credentials and checking the reservations visibile to different users
+6. If there are errors, click `More` and use options, such as `View logs` or `Run console`
 
 # Credits
 
