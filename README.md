@@ -5,6 +5,17 @@
 - [Overview](https://github.com/fokhrun/restaurant_reservation#Overview)
 - [Requirements](https://github.com/fokhrun/restaurant_reservation#requirements)
     - [Functional Requirements](https://github.com/fokhrun/restaurant_reservation#functional-requirements)
+    - [Technical Requirements](https://github.com/fokhrun/restaurant_reservation#technical-requirements)
+- [Tecnical Design](https://github.com/fokhrun/restaurant_reservation#tecnical-design)
+    - [High Level Tech Stack](https://github.com/fokhrun/restaurant_reservation#high-level-tech-stack)
+    - [High Level Architecture](https://github.com/fokhrun/restaurant_reservation#high-level-architecture)
+- [Key Implementation Aspects](https://github.com/fokhrun/restaurant_reservation#key-implementation-aspects)
+    - [Code Repository Structure](https://github.com/fokhrun/restaurant_reservation#code-repository-structure)
+    - [Flask App Factory](https://github.com/fokhrun/restaurant_reservation#flask-app-factory)
+    - [Data Model](https://github.com/fokhrun/restaurant_reservation#data-model)
+    - [Flask Templates](https://github.com/fokhrun/restaurant_reservation#flask-templates)
+    - [Handling Authentications](https://github.com/fokhrun/restaurant_reservation#handling-authentication)
+    - [Handling Reservation](https://github.com/fokhrun/restaurant_reservation#handling-reservation)
 
 ## Overview
 
@@ -13,9 +24,9 @@
 - the site owner to manage reservations for its restaurant guests through a centrally managed reservation database
 - The site provides a role-based management of reservation database
 
-# Requirements
+## Requirements
 
-## Functional requirements
+### Functional requirements
 
 The site supports three types of users:
 - `visitor`: can visit publicly available pages, anyone who landed in the site
@@ -50,7 +61,7 @@ The site has the following pages:
         - create any new reservation slot
         - remove any existing reservation slot
 
-## Technical Requirements
+### Technical Requirements
 - The site should be a full-stack website that is inspired by MVC framework with the following tech stack
     - Frontend implemented by HTML, CSS, and Javascript
     - Backend implemented by Python web frameworks
@@ -72,19 +83,9 @@ The site has the following pages:
 - The code should be free of any passwords or security-sensitive information to the repository and the hosting platform
 - The site should be deployed to Heroku
 
+## Tecnical Design
 
-## Software Project Management Requirements
-- The planning and delivery progress should be managed using GitHub issues
-- The user stories implemented by the site should be documented as GitHub Issues
-- Document the UX design work undertaken for this project, including any wireframes, mockups, diagrams, etc., created as part of the design process and its reasoning
-- It codebase should be managed using GitHub repository so that a team of software develop can contribute without conflicts at the same time
-- The HTML and CSS code should be validated
-- The codebase should be readable and leverage a good balance of comments, indentation, consistent and meaningful naming conventions for files, modules, functions, and other code components
-
-
-# Tecnical Design
-
-## High-level tech stack
+### High Level Tech Stack
 
 - Front End: [Bootstrap Framework](https://getbootstrap.com/docs/5.3/getting-started/introduction/) (HTML, CSS, Javascript)
 - Back End: [Flask Framework](https://flask.palletsprojects.com/en/3.0.x/) (Python)
@@ -92,21 +93,14 @@ The site has the following pages:
 - Database: [MySQL](https://dev.mysql.com/doc/refman/8.0/en/introduction.html)
 - Cloud: [Heroku](https://dashboard.heroku.com/apps)
 
-## High-level architecture
+### High Level Architecture
 
 ![High-level application architecture](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/flask_app_architecture.png)
 
-### Wireframes for cruicial pages
+## Key Implementation Aspects
 
-![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
+### Code Repository Structure
 
-### Controllers
-
-## Data model
-
-![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
-
-### Code repository structure
 ```
 - app/ : source code for the flask app
     - __init__.py : include app factory method where blueprints, migration handler, database handler, login manager, etc., are registered
@@ -140,9 +134,7 @@ The site has the following pages:
 - wsgi.py : main entry point to run the app through command line
 ```
 
-## Key Software Design Aspects
-
-### Flask app factory
+### Flask App Factory
 
 Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delay the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration, but also the ability  to create multiple application instances—another thing that can be very useful during testing.
 
@@ -156,14 +148,18 @@ the common routes in `app\main\views.py`.
 
 Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py` and `app\main\erorrs.py` for more details.
 
-### Flask templates
+### Data model
+
+![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
+
+### Flask Templates
 
 Flask leverages `jinja2` based [templates](https://flask.palletsprojects.com/en/1.1.x/tutorial/templates/) that basically injects input from backend to be rendered to the frontend.
 It uses `render_template` function that is typically included in a function that handles a `route`. From `index.html` is a template in `app\main\templates` that will be rendered by `render_template` a function named `index()` that is decordated with `@app.route("\")` in `views.py`. When a request for such a route comes from the site, it leverages that `index()`
 which at the end will call `render_template("main.index.html")`. Note that `main` is the blueprint where the route is managed. The function can provide additional parameters as 
 keyword arguments, which can be input from the front end, but can also be additional parameters managed by the function. 
 
-### Authentication functionality
+### Handling Authentication
 
 The site admin can reserve tables on behalf of any restaurant guests. However, the site provides fine-grained table reservation capability to authenticated users as follows:
 
@@ -314,7 +310,11 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
 
 ![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flash_screen.png)
 
-### Current user
+
+### Handling Reservation
+
+![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
+
 
 ## Future improvements
 
