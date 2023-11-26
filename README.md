@@ -1,5 +1,13 @@
 # Spice Magic
 
+### Table of contents
+
+- [Overview](https://github.com/fokhrun/restaurant_reservation#Overview)
+- [Requirements](https://github.com/fokhrun/restaurant_reservation#requirements)
+    - [Functional Requirements](https://github.com/fokhrun/restaurant_reservation#functional-requirements)
+
+## Overview
+
 [Spice Magic](https://restaurant-binita-99be9591d7d4.herokuapp.com/) is a full stack restaurant website. The site provides 
 - the site guests to see the restaurant menu
 - the site owner to manage reservations for its restaurant guests through a centrally managed reservation database
