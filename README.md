@@ -31,13 +31,12 @@ The site has the following pages:
             - can add a remark about reservations
         - cancel already made reservations
         - cannot reserve table reserved by someone else
-
     2. `admin` can 
         - view any reservations status of any table made by anyone
         - make reservations for anyone
             - can add a remark about reservations
         - cancel anyone's reservation
-    3. `reservation_admin` can
+    3. `admin` can
         - create new type of tables 
         - remove any existing type of tables
         - create any new reservation slot
@@ -133,16 +132,179 @@ The site has the following pages:
 - wsgi.py : main entry point to run the app through command line
 ```
 
-## Special techniques
+## Key Software Design Aspects
 
 ### Flask app factory
 
-Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delay the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration, but also the ability 
-to create multiple application instances—another thing that can be very useful during testing.
+Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delay the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration, but also the ability  to create multiple application instances—another thing that can be very useful during testing.
 
 Check `app\__init__.py` for more details.
 
-### Password management
+#### Flask Blueprints 
+
+Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in factory app creation 
+method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. The `main` blueprint covers 
+the common routes in `app\main\views.py`. 
+
+Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py` and `app\main\erorrs.py` for more details.
+
+### Flask templates
+
+Flask leverages `jinja2` based [templates](https://flask.palletsprojects.com/en/1.1.x/tutorial/templates/) that basically injects input from backend to be rendered to the frontend.
+It uses `render_template` function that is typically included in a function that handles a `route`. From `index.html` is a template in `app\main\templates` that will be rendered by `render_template` a function named `index()` that is decordated with `@app.route("\")` in `views.py`. When a request for such a route comes from the site, it leverages that `index()`
+which at the end will call `render_template("main.index.html")`. Note that `main` is the blueprint where the route is managed. The function can provide additional parameters as 
+keyword arguments, which can be input from the front end, but can also be additional parameters managed by the function. 
+
+### Authentication functionality
+
+The site admin can reserve tables on behalf of any restaurant guests. However, the site provides fine-grained table reservation capability to authenticated users as follows:
+
+- Site visitors can register using their name, email-addresses, passwords known to them. 
+- Registered site `guests` can login using their email address and password to start using fine-grained reservation functionality
+- `admin` is precreated by the site admin, who maintains the site. Once it is created, the `admin` can carry out advanced tasks on the reservations.
+
+#### Authentication extensions for flask
+
+We use the following Python packages
+- `flask-login`: managing logged-in user sessions
+- `werkzeug`: password hashing and verification
+- `flask-wtf`: forms for login and registration
+
+#### Password security
+
+`werkzeug`’s security module conveniently implements secure password hashing: 
+- `generate_password_hash`: takes a plain-text password and returns the password hash as a string that can be stored in the user database. 
+- `check_password_hash`: takes a password hash previously stored in the database and the password entered by the user, and returns `True` indicating 
+that password is correct
+
+These functions are used in the `User` model in `app/main/models.py`.
+
+```
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class User(db.Model):
+# ...
+password_hash = db.Column(db.String(128))
+
+@property
+def password(self):
+    raise AttributeError('password is not a readable attribute')
+
+@password.setter
+    def password(self, password):
+    self.password_hash = generate_password_hash(password)
+
+def verify_password(self, password):
+    return check_password_hash(self.password_hash, password)
+```
+
+The password hashing function is implemented through a write-only property called `password`. When this property is set, the setter method will call
+`generate_password_hash()` function and write the result to the `password_hash` field. Attempting to read the password property will return an error, 
+as clearly the original password cannot be recovered once hashed.
+
+The `verify_password()` method takes a password and passes it to `check_password_hash()` function for verification against the hashed version stored 
+in the `User` model. If this method returns True, then the password is correct.
+
+#### Authentication Blueprint
+
+The routes related to the user authentication subsystem will be added to a blueprint called `auth` that manages `login`, `logout`, and `register` routes. 
+
+#### User authentication
+
+`flask-login` implements `is_authenticated`, `is_active`, `is_anonymous`, and `get_id` as properties and methods through `UserMixin` 
+class. It needs to be implemented through `User` as follows:
+
+```
+from flask_login import UserMixin
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key = True)
+    email = db.Column(db.String(64), unique=True, index=True)
+    username = db.Column(db.String(64), unique=True, index=True)
+    password_hash = db.Column(db.String(128))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+```
+
+flask-login needs to be initialized in the app factory function as follows. The `login_view` attribute of the `LoginManager` object sets the endpoint for the login page. Flask-Login will redirect to the login page when an anonymous user tries to access a protected page. Because the login route is inside a blueprint, it needs to be prefixed with the blueprint name.
+
+```
+from flask_login import LoginManager
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+
+def create_app(config_name):
+    ...
+    login_manager.init_app(app)
+    ...
+```
+
+`flask-login` requires the application to designate a function to be invoked when the extension needs to load a user from the database given its identifier. It is done through
+`user_loader` decorator that register the function with `flask-login`, which will call it when it needs to retrieve information about the logged-in user. The user identifier will be passed as a string, so the function converts it to an integer before it passes it to the `SQLAlchemy` query that loads the user. The return value of the function must be the user object, or `None` if the user identifier is invalid or any other error occurred. Check out the following implementation:
+
+```
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+```
+
+For more details, check `app/main/models.py` ajd `app/__init__.py`.
+
+#### Protecting Routes
+
+To protect a route so that it can only be accessed by authenticated users, `FlaskLogin` provides a `login_required` decorator. An example of its usage follows:
+```
+from flask_login import login_required
+
+@app.route('/a_protected_route')
+@login_required
+def secret():
+    return 'Only authenticated users are allowed!'
+```
+
+#### Login form
+
+The login form that will be presented to users has a text field for the email address, a password field, a “remember me” checkbox, and a submit button. In addition
+a set of validators needs to be implemented to ensure that wrong inputs are not passed. All of these are very straightforward to implement using `flask-wtf` and `wtforms`. 
+
+Check out the following example, which is a skeleton for our implementation: 
+
+```
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import DataRequired, Length, Email
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Keep me logged in')
+    submit = SubmitField('Log In')
+```
+
+#### Authentication templates
+
+We implemented two templates namely `login.html` and `logout.html` that have similar designs. These templates can be found in the `app\templates\auth` folder. The rendered pages 
+looks like the following screenshots.
+
+![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/register_login_screens.png)
+
+The main code that handles these templates are placed in `base.html` template using the following code snippet. 
+
+```
+<ul class="nav navbar-nav navbar-right">
+{% if current_user.is_authenticated %}
+<li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+{% else %}
+<li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+{% endif %}
+</ul>
+```
+
+The following image show how the rendering of these code snippets happen in the frontend. It also shows how flash message 
+is shown to the user, when a user logs out or inputs wrong email address or password.
+
+![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flash_screen.png)
 
 ### Current user
 
@@ -188,7 +350,6 @@ Here's an example configuration for debugging a Flask app in VSCode:
 - Create a `launch.json` file inside the `.vscode` directory in your project if it doesn't exist.
 - VSCode will auto generate the `launch.json` if you provide correct options, for example python, then Python: Flask, and wsgi.py
 
-
 """
     {
     // Use IntelliSense to learn about possible attributes.
@@ -217,12 +378,18 @@ Here's an example configuration for debugging a Flask app in VSCode:
 }
 """
 
-
 - Set breakpoints in your code by clicking in the gutter area next to the line number in VSCode.
 
 - Start the debugger by pressing F5 or clicking on the debug icon in VSCode and selecting the Flask configuration you just created.
 
 - This setup will allow you to debug your Flask app by running it in debug mode within VSCode.
+
+## Language/Library requirements
+
+
+### Non-compatible with flask-login and flask on versions
+
+The current version of flask-login is not compatible with flask > 3.0. The fixes are in the way to make it work soon. More details can be found in this [issue](https://github.com/maxcountryman/flask-login/issues/805). Until then, it is recommended to use a widely accepted [temporary fix](https://github.com/maxcountryman/flask-login/issues/809).
 
 ## Working with styling
 
