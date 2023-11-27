@@ -494,6 +494,7 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 - `HTML`: codes have been validated using `https://validator.w3.org/`. No errors or warnings are reported after fixing some minor mistakes
 - `CSS`: codes are generated using the `node-sass`, which makes w3c validator `https://jigsaw.w3.org/css-validator` non applicable. 
 - `Javascript`: no manual javascript has been added yet. 
+- Overall: `Lighthouse` test has given a high rating higher 90s in Performance, Accessibility, and Best Practices for all pages.
 
 #### Backend Code Readability [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
