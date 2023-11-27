@@ -13,6 +13,7 @@
     - [Code Repository Structure](https://github.com/fokhrun/restaurant_reservation#code-repository-structure-)
     - [Flask App Factory](https://github.com/fokhrun/restaurant_reservation#flask-app-factory-)
         - [Flask Blueprints](https://github.com/fokhrun/restaurant_reservation#flask-blueprints-)
+    - [Application Script](https://github.com/fokhrun/restaurant_reservation#application-script)
     - [Data Model](https://github.com/fokhrun/restaurant_reservation#data-model-)
     - [Flask Templates](https://github.com/fokhrun/restaurant_reservation#flask-templates-)
     - [Handling Authentications](https://github.com/fokhrun/restaurant_reservation#handling-authentication-)
@@ -30,7 +31,6 @@
     - [VSCode Debugger](https://github.com/fokhrun/restaurant_reservation#vscode-debugger-)
     - [Language/Library Requirements](https://github.com/fokhrun/restaurant_reservation#language/library-requirements-)
     - [Working With Styling](https://github.com/fokhrun/restaurant_reservation#working-with-styling-)
-    - [Working With Custom Theme](https://github.com/fokhrun/restaurant_reservation#working-with-custom-theme-)
     - [Testing & Validation](https://github.com/fokhrun/restaurant_reservation#testing-&-validation-)
         - [Running Tests](https://github.com/fokhrun/restaurant_reservation#running-tests-)
         - [Test Cases](https://github.com/fokhrun/restaurant_reservation#test-cases-)
@@ -175,17 +175,66 @@ For each `route`, there is a controlling function in the Flask app that receives
 
 ### Flask App Factory [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delaying the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration but also the ability  to create multiple application instances—another thing that can be very useful during testing.
+Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delaying the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration but also the ability to create multiple application instances—another thing that can be very useful during testing or running migration while the app is running.
 
 Check `app\__init__.py` for more details.
 
-#### Flask Blueprints [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+### Flask Blueprints [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in the factory app creation 
-method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. The `main` blueprint covers 
-the common routes in `app\main\views.py`. 
+Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in the factory app creation method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. As mentioned earlier, the there are two view subsystems, `main` and `auth`. 
 
-Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py`, and `app\main\erorrs.py` for more details.
+
+The `main` blueprint covers the common site information and reservation routes: `\`, `\menu`, `\reserve`, and `\admin`, etc. These route controllers are defined in `app\main\views.py`. Typically blueprints are defined as follows. 
+
+```
+from flask import Blueprint
+
+main = Blueprint('main', __name__)
+
+from . import views, errors
+```
+
+These blueprints are then registered in the app as follows.
+
+```
+def create_app(config_name):
+    # ...
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+    return app
+```
+
+Then the route handler, i.e., controllers are defined as follows:
+
+from . import main
+
+```
+@main.route('/')
+def index():
+    # ..
+```
+
+Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py`, and `app\main\erorrs.py` for more details. The `auth` blueprint covers the authentication related routes: `\login`, `\logout`, and `\register`.  Check `app\__init__.py`, `app\auth\__init__.py`, and `app\auth\views.py` for more details.
+
+### Application Script [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+We define the application running script in `wsgi.py`, which allows us to run the app directly running the command `flask run`. 
+
+The script begins by creating an application. The configuration is taken from the environment variable `FLASK_CONFIG`. Flask-Migrate and the custom context for the Python shell are then initialized.
+
+```
+import os
+from app import create_app, db
+from app.models import User, Role
+from flask_migrate import Migrate
+
+app = create_app(os.getenv('FLASK_CONFIG'))
+migrate = Migrate(app, db)
+
+@app.shell_context_processor
+def make_shell_context():
+    return dict(db=db, User=User, Role=Role)
+```
 
 ### Data model [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -348,11 +397,9 @@ The following image shows how the rendering of these code snippets happens in th
 
 ![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flash_screen.png)
 
-
 ### Handling Reservation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
-
 
 ## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -372,7 +419,7 @@ The following image shows how the rendering of these code snippets happens in th
 1. Ensure that you have a Python version of at least `Python v3.11` and `pip v23.3.1`
 2. Clone the repository https://github.com/fokhrun/restaurant_reservation.git as `restaurant_reservation` in your local directory
 3. Work inside `restaurant_reservation`
-2. Create a virtual environment using `venv`:
+4. Create a virtual environment using `venv`:
     ```
     1. python3 -m venv venv
     2. .\venv\Scripts\activate
@@ -430,40 +477,27 @@ Here's an example configuration for debugging a Flask app in VSCode:
 
 ### Language/Library Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
+The two main languages that leverages libraries are `Python` and `Javascript`. 
 
-#### Non-compatible with flask-login and flask on versions [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+For Python, we manage libraries in `requirements.txt`. The libraries are installed in the local development environment using `pip`. It is a good idea to refresh this file whenever a package is installed or upgraded. The libraries should be installed in a virtual environment. The instructions are given in a first few steps in [Developer Environment](https://github.com/fokhrun/restaurant_reservation#developer-environment-). 
 
-The current version of flask-login is not compatible with flask > 3.0. The fixes are in the way to make it work soon. More details can be found in this [issue](https://github.com/maxcountryman/flask-login/issues/805). Until then, it is recommended to use a widely accepted [temporary fix](https://github.com/maxcountryman/flask-login/issues/809).
+The requirements file mentions the version numbers with each of the libraries. However, the current version of flask-login is not compatible with flask > 3.0. The fixes are in the way to make it work soon. More details can be found in this [issue](https://github.com/maxcountryman/flask-login/issues/805). Until then, it is recommended to use a widely accepted [temporary fix](https://github.com/maxcountryman/flask-login/issues/809).
+
+For Javascript, the libraries are installed using `npm`, which requires `node.js`. In this project, we leverage `bootstrap` and `node-sass`, which are installed using `npm`. Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages locally. It requires defining a `package.json` file where versions of the libraries are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which should be included in the `.gitignore` folder.
+
+In this project, we are working with `bootstrap@4.5`. To install `bootstrap`, run the command `npm install bootstrap` and to install `node-sass`, run the command `npm install node-sass`.
 
 ### Working With Styling [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-This project leverages `bootstrap` for default themes and `node-sass` for custom themes for styling. Working with both locally using `npm`, which requires `node.js`. 
-Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages locally. It requires defining a `package.json` file 
-where versions of the libraries are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which
-should be included in the `.gitignore` folder.  
+This project leverages `bootstrap` for default themes and `node-sass` for custom themes for styling. 
 
-#### Working with ready-to-use theme [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
-
-To start leveraging ready-made themes, we mainly work using `bootstrap`. In this project, we are working with `bootstrap@4.5`. To install `bootstrap`, run the following command: 
-
-```
-npm install bootstrap
-```
-
-To work with Bootstrap, just have to copy-paste the following stylesheet <link> into the <head> of `base.html`, which is used in all other html files.
+To work with Bootstrap, copy-paste the stylesheet <link> into the <head> of `base.html`, which is used in all other html files.
 
 ```
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 ```
 
-### Working With Custom Theme [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
-
-We may want to influence the coloring theme in a more custom manner than what `bootstrap` provides. A very good way to do it is using [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like 
-`node-sass` to compile `SCSS` files into `CSS`. To install `node-sass`, run the following command:
-
-```
-npm install node-sass  
-```
+To working with custom theme. e.g., to influence the coloring theme in a more custom manner than what `bootstrap` provides, we use [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like `node-sass` to compile `SCSS` files into `CSS`. 
 
 To add global `SCSS` in a `Flask` application, we need to compile the SCSS files into CSS files. To do that, carry out the following steps:
 
@@ -476,11 +510,7 @@ To add global `SCSS` in a `Flask` application, we need to compile the SCSS files
     ```
     Here the `theme_color` is another scss file where the theme colors are defined. 
 
-- Compile the SCSS file into a CSS file using node-sass:
-
-```
-node-sass app/static/scss/main.scss app/static/css/main.css
-```
+- Compile the SCSS file into a CSS file using the command `node-sass app/static/scss/main.scss app/static/css/main.css`
 
 - To use the `main.css` overriding bootstrap themes, link to it using the url_for function. This line should be placed inside the <head> tag of `base.html`.
 
