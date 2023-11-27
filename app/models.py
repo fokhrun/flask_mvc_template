@@ -1,8 +1,10 @@
 """ Models for the template application"""
 
+# pylint: disable=C0103, E0402, R0903
+
 from enum import Enum
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, login_manager
 
 

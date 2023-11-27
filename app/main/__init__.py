@@ -1,8 +1,10 @@
+""" Main blueprint. """
+
+# pylint: disable=C0413, R0401
 
 from flask import Blueprint
 
 
 main = Blueprint("main", __name__)
 
-
-from . import views, errors  # noqa: E402, F401
+from . import views, errors

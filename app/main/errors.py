@@ -1,5 +1,5 @@
 """error handlers"""
-
+# pylint: disable=W0613
 
 from flask import render_template
 from . import main

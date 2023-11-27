@@ -31,10 +31,11 @@ def create_app(config_name):
     db.init_app(app)  # Initialize the database object with app context
     login_manager.init_app(app)  # Initialize the login manager object with app context
 
-    from .main import main as main_blueprint  # noqa: E402
-    app.register_blueprint(main_blueprint)  # Register the routes in main/views.py
+    # pylint: disable=C0415
+    from .main import main as main_blueprint
+    from .auth import auth as auth_blueprint
 
-    from .auth import auth as auth_blueprint  # noqa: E402
+    app.register_blueprint(main_blueprint)  # Register the routes in main/views.py
     app.register_blueprint(auth_blueprint, url_prefix="/auth")  # Register the routes in auth/views.py
 
     return app

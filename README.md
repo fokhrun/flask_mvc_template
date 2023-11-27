@@ -31,7 +31,7 @@
     - [Language/Library Requirements](https://github.com/fokhrun/restaurant_reservation#language/library-requirements-)
     - [Working With Styling](https://github.com/fokhrun/restaurant_reservation#working-with-styling-)
     - [Working With Custom Theme](https://github.com/fokhrun/restaurant_reservation#working-with-custom-theme-)
-    - [Testing](https://github.com/fokhrun/restaurant_reservation#testing-)
+    - [Testing & Validation](https://github.com/fokhrun/restaurant_reservation#testing-&-validation-)
         - [Running Tests](https://github.com/fokhrun/restaurant_reservation#running-tests-)
         - [Test Cases](https://github.com/fokhrun/restaurant_reservation#test-cases-)
 - [Deployment to Production](https://github.com/fokhrun/restaurant_reservation#deployment-to-production-)
@@ -479,7 +479,7 @@ Here's an example of to do this in a Jinja2 template:
 
 Note that every time there is a change in the SCSS files, we need to recompile them into CSS.
 
-### Testing [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+### Testing & Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 #### Running Tests [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -487,6 +487,28 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 - Run `flask test`
 
 #### Test Cases [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+### Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+#### Front End Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+- `HTML`: codes have been validated using `https://validator.w3.org/`. No errors or warnings are reported after fixing some minor mistakes
+- `CSS`: codes are generated using the `node-sass`, which makes w3c validator `https://jigsaw.w3.org/css-validator` non applicable. 
+- `Javascript`: no manual javascript has been added yet. 
+
+#### Backend Code Readability [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+The code is validated using the command `pylint --max-line-length=120`. The max line length is changed from 80 to 120 to achieve optimal 
+readability in modern screens.
+
+The following warnings has been suppressed to handle special cases:
+- `# pylint: disable=C0415` in `app\__init__.py`
+- `# pylint: disable=C0413, R0401` in `app\main\__init__.py`
+- `# pylint: disable=W0613` in `app\main\errors.py`
+- `# pylint: disable=C0121` in `app\main\model_services.py`
+- `# pylint: disable=C0103, E0402, R0903` in `app\main\models.py`
+- `# pylint: disable=C0413, R0401` in `app\auth\__init__.py`
+
+Apart from these, there are no other errors or warnings reported by `pylint`.
 
 ### Deployment To Production [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 

@@ -51,8 +51,9 @@ def get_reservations(reservation_date, user):
             Reservation.reservation_date == reservation_date,
             or_(
                 Reservation.user_id == user.id,
-                Reservation.reservation_status == False  # noqa: E712
-            ),  
+                # pylint: disable=C0121
+                Reservation.reservation_status == False
+            ),
         )
         reservations = Reservation.query.filter(get_non_reserved_today)
 

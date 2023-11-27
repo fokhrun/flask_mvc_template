@@ -50,7 +50,6 @@ def table_reservation():
 
     reservations = get_reservations(reservation_date=reservation_date, user=current_user)
 
-    # TODO: Add a flash message for the user
     res_form = ReservationForm()
     if res_form.validate_on_submit():
         update_reservation(reservations=reservations, slot_reserved_statuses=res_form.slot_reserved_statuses.data)
