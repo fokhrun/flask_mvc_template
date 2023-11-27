@@ -47,6 +47,8 @@
 - the site owner to manage reservations for its restaurant guests through a centrally managed reservation database
 - The site provides a role-based management of reservation database
 
+![Spice Magic Multi-Screen Screenshot](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/multi-screen.png)
+
 ## Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ### Functional Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
