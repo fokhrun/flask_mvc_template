@@ -341,17 +341,14 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
 
 ## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-### Model [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
-- must
-    - User
-        - validation for `email` to be actual email address
-- should
-    - User
-        - make `role` non-nullable
-- could
-    - User
-
-    -   
+- Make role of `User` model non-nullable
+- Add more unittests for `app/main/views`
+- Add Javascript-based validation for the login/registration pages
+- Add a more elegant reservation system where a user do not have to mention which table, rather the guest number
+- Add a mechanism to provide remarks for reservations
+- Add a mechanism for the site admin to handle reservation request through an approval flow
+- Add Email-based two step registration process for new users
+- Add a mechanism to reset password by an existing user
 
 ## Developer Guide [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
