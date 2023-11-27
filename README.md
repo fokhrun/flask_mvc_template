@@ -15,6 +15,7 @@
         - [Flask Blueprints](https://github.com/fokhrun/restaurant_reservation#flask-blueprints-)
     - [Application Script](https://github.com/fokhrun/restaurant_reservation#application-script)
     - [Data Model](https://github.com/fokhrun/restaurant_reservation#data-model-)
+        - [Database Management](https://github.com/fokhrun/restaurant_reservation#database-management-)
     - [Flask Templates](https://github.com/fokhrun/restaurant_reservation#flask-templates-)
     - [Handling Authentications](https://github.com/fokhrun/restaurant_reservation#handling-authentication-)
         - [Authentication Related Flask Libraries](https://github.com/fokhrun/restaurant_reservation#authentication-related-flask-libraries-)
@@ -238,7 +239,36 @@ def make_shell_context():
 
 ### Data model [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
+The data model employed in this project is illustrated in the following diagram. It includes four tables:
+
+- `Role`: that implements the type of the user
+- `User`: that implements the user profile including authentication capabilities,, has many-to-one relationship with `Role`
+- `Table`: that implements the concept of table, which brings capacity information for reservations
+- `Reservation`: that implements that reservation concept that has one-to-many relationship with `Table` and one-to-one relationship `User`
+
+These model is implemented as model classes using `flask-sqlalchemy`. Check those classes in `app\models.py`.In addition, there are two Enum classes that implements fixed table capacities and reservation slots.
+
 ![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
+
+#### Database Management [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+We manage MySQL database using `mysqlclient` and `alembic` library. It is done through migrate object, which is created as 
+
+```
+from flask_migrate import Migrate
+from app import db
+
+migrate = Migrate(app, db)
+```
+
+When this object is created, the following commands can be executed to create the migration script.
+
+```
+1. flask db init
+2. flask db migrate -m "<sample message>"
+```
+
+Whenever there is a change in Model objects, line 2 should be executed again. Once the script is ready run the command `flask db upgrade` in any environment to prepare the tables in the database.
 
 ### Flask Templates [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -555,8 +585,7 @@ class FlaskAppTestCase(unittest.TestCase):
 This class can be used as `TestTableReservation(FlaskAppTestCase)`, which inherits its `setUp` and `tearDown` functions unless overridden.
 
 We implemented the following test cases using this class:
-
-
+- 
 
 We defined another class named `FlaskAppTestCaseWithModels`, which creates the test app and populates the test database with some dummy tables and entries based on our models. This class is used when the models needs to be accessed. Both these classes are defined in `tests\utils.py`.
 
