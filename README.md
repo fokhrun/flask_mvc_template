@@ -12,21 +12,45 @@
 - [Key Implementation Aspects](https://github.com/fokhrun/restaurant_reservation#key-implementation-aspects)
     - [Code Repository Structure](https://github.com/fokhrun/restaurant_reservation#code-repository-structure)
     - [Flask App Factory](https://github.com/fokhrun/restaurant_reservation#flask-app-factory)
+        - [Flask Blueprints](https://github.com/fokhrun/restaurant_reservation#flask-blueprints)
     - [Data Model](https://github.com/fokhrun/restaurant_reservation#data-model)
     - [Flask Templates](https://github.com/fokhrun/restaurant_reservation#flask-templates)
     - [Handling Authentications](https://github.com/fokhrun/restaurant_reservation#handling-authentication)
     - [Handling Reservation](https://github.com/fokhrun/restaurant_reservation#handling-reservation)
+        - [Authentication Related Flask Libraries](https://github.com/fokhrun/restaurant_reservation#authentication-related-flask-libraries)
+        - [Password Security](https://github.com/fokhrun/restaurant_reservation#password-security)
+        - [Authentication Blueprint](https://github.com/fokhrun/restaurant_reservation#authentication-blueprint)
+        - [User Authentication](https://github.com/fokhrun/restaurant_reservation#user-authentication)
+        - [Protecting Routes](https://github.com/fokhrun/restaurant_reservation#Protecting-Routes)
+        - [Login Form](https://github.com/fokhrun/restaurant_reservation#login-form)
+        - [Authentication Templates](https://github.com/fokhrun/restaurant_reservation#authentication-templates)
+    - [Handling Reservation](https://github.com/fokhrun/restaurant_reservation#handling-reservation)
+- [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements)
+- [Developer Guide](https://github.com/fokhrun/restaurant_reservation#developer-guide)
+    - [Developer Environment](https://github.com/fokhrun/restaurant_reservation#developer-environment)
+    - [VSCode Debugger](https://github.com/fokhrun/restaurant_reservation#vscode-debugger)
+    - [Language/Library Requirements](https://github.com/fokhrun/restaurant_reservation#language/library-requirements)
+    - [Working With Styling](https://github.com/fokhrun/restaurant_reservation#working-with-styling)
+    - [Working With Custom Theme](https://github.com/fokhrun/restaurant_reservation#working-with-custom-theme)
+    - [Testing](https://github.com/fokhrun/restaurant_reservation#testing)
+    - [Running Tests](https://github.com/fokhrun/restaurant_reservation#running-tests)
+    - [Test Cases](https://github.com/fokhrun/restaurant_reservation#test-cases)
+- [Deployment to Heroku](https://github.com/fokhrun/restaurant_reservation#deployment-to-heroku)
+    - [Preparation For Heroku Deployment](https://github.com/fokhrun/restaurant_reservation#preparation-for-heroku-deployment)
+    - [Deployment Steps](https://github.com/fokhrun/restaurant_reservation#deployment-steps)
+    - [Preparing Production Environment](https://github.com/fokhrun/restaurant_reservation#preparing-production-environment)
+- [Credits](https://github.com/fokhrun/restaurant_reservation#credits)
 
-## Overview
+## Overview [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 [Spice Magic](https://restaurant-binita-99be9591d7d4.herokuapp.com/) is a full stack restaurant website. The site provides 
 - the site guests to see the restaurant menu
 - the site owner to manage reservations for its restaurant guests through a centrally managed reservation database
 - The site provides a role-based management of reservation database
 
-## Requirements
+## Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-### Functional requirements
+### Functional Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The site supports three types of users:
 - `visitor`: can visit publicly available pages, anyone who landed in the site
@@ -61,7 +85,7 @@ The site has the following pages:
         - create any new reservation slot
         - remove any existing reservation slot
 
-### Technical Requirements
+### Technical Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 - The site should be a full-stack website that is inspired by MVC framework with the following tech stack
     - Frontend implemented by HTML, CSS, and Javascript
     - Backend implemented by Python web frameworks
@@ -83,9 +107,9 @@ The site has the following pages:
 - The code should be free of any passwords or security-sensitive information to the repository and the hosting platform
 - The site should be deployed to Heroku
 
-## Tecnical Design
+## Tecnical Design [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-### High Level Tech Stack
+### High Level Tech Stack [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 - Front End: [Bootstrap Framework](https://getbootstrap.com/docs/5.3/getting-started/introduction/) (HTML, CSS, Javascript)
 - Back End: [Flask Framework](https://flask.palletsprojects.com/en/3.0.x/) (Python)
@@ -93,13 +117,13 @@ The site has the following pages:
 - Database: [MySQL](https://dev.mysql.com/doc/refman/8.0/en/introduction.html)
 - Cloud: [Heroku](https://dashboard.heroku.com/apps)
 
-### High Level Architecture
+### High Level Architecture [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ![High-level application architecture](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/flask_app_architecture.png)
 
-## Key Implementation Aspects
+## Key Implementation Aspects [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-### Code Repository Structure
+### Code Repository Structure [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ```
 - app/ : source code for the flask app
@@ -134,13 +158,13 @@ The site has the following pages:
 - wsgi.py : main entry point to run the app through command line
 ```
 
-### Flask App Factory
+### Flask App Factory [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delay the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration, but also the ability  to create multiple application instances—another thing that can be very useful during testing.
 
 Check `app\__init__.py` for more details.
 
-#### Flask Blueprints 
+#### Flask Blueprints [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in factory app creation 
 method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. The `main` blueprint covers 
@@ -148,18 +172,18 @@ the common routes in `app\main\views.py`.
 
 Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py` and `app\main\erorrs.py` for more details.
 
-### Data model
+### Data model [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
 
-### Flask Templates
+### Flask Templates [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 Flask leverages `jinja2` based [templates](https://flask.palletsprojects.com/en/1.1.x/tutorial/templates/) that basically injects input from backend to be rendered to the frontend.
 It uses `render_template` function that is typically included in a function that handles a `route`. From `index.html` is a template in `app\main\templates` that will be rendered by `render_template` a function named `index()` that is decordated with `@app.route("\")` in `views.py`. When a request for such a route comes from the site, it leverages that `index()`
 which at the end will call `render_template("main.index.html")`. Note that `main` is the blueprint where the route is managed. The function can provide additional parameters as 
 keyword arguments, which can be input from the front end, but can also be additional parameters managed by the function. 
 
-### Handling Authentication
+### Handling Authentication [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The site admin can reserve tables on behalf of any restaurant guests. However, the site provides fine-grained table reservation capability to authenticated users as follows:
 
@@ -167,14 +191,14 @@ The site admin can reserve tables on behalf of any restaurant guests. However, t
 - Registered site `guests` can login using their email address and password to start using fine-grained reservation functionality
 - `admin` is precreated by the site admin, who maintains the site. Once it is created, the `admin` can carry out advanced tasks on the reservations.
 
-#### Authentication extensions for flask
+#### Authentication Related Flask Libraries [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 We use the following Python packages
 - `flask-login`: managing logged-in user sessions
 - `werkzeug`: password hashing and verification
 - `flask-wtf`: forms for login and registration
 
-#### Password security
+#### Password Security [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 `werkzeug`’s security module conveniently implements secure password hashing: 
 - `generate_password_hash`: takes a plain-text password and returns the password hash as a string that can be stored in the user database. 
@@ -209,11 +233,11 @@ as clearly the original password cannot be recovered once hashed.
 The `verify_password()` method takes a password and passes it to `check_password_hash()` function for verification against the hashed version stored 
 in the `User` model. If this method returns True, then the password is correct.
 
-#### Authentication Blueprint
+#### Authentication Blueprint [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The routes related to the user authentication subsystem will be added to a blueprint called `auth` that manages `login`, `logout`, and `register` routes. 
 
-#### User authentication
+#### User Authentication [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 `flask-login` implements `is_authenticated`, `is_active`, `is_anonymous`, and `get_id` as properties and methods through `UserMixin` 
 class. It needs to be implemented through `User` as follows:
@@ -255,7 +279,7 @@ def load_user(user_id):
 
 For more details, check `app/main/models.py` ajd `app/__init__.py`.
 
-#### Protecting Routes
+#### Protecting Routes [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 To protect a route so that it can only be accessed by authenticated users, `FlaskLogin` provides a `login_required` decorator. An example of its usage follows:
 ```
@@ -267,7 +291,7 @@ def secret():
     return 'Only authenticated users are allowed!'
 ```
 
-#### Login form
+#### Login Form [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The login form that will be presented to users has a text field for the email address, a password field, a “remember me” checkbox, and a submit button. In addition
 a set of validators needs to be implemented to ensure that wrong inputs are not passed. All of these are very straightforward to implement using `flask-wtf` and `wtforms`. 
@@ -286,7 +310,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Log In')
 ```
 
-#### Authentication templates
+#### Authentication Templates [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 We implemented two templates namely `login.html` and `logout.html` that have similar designs. These templates can be found in the `app\templates\auth` folder. The rendered pages 
 looks like the following screenshots.
@@ -311,14 +335,14 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
 ![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flash_screen.png)
 
 
-### Handling Reservation
+### Handling Reservation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
 
 
-## Future improvements
+## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-### Model
+### Model [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 - must
     - User
         - validation for `email` to be actual email address
@@ -330,9 +354,9 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
 
     -   
 
-# Developer Guide
+## Developer Guide [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-## Developer Environment
+### Developer Environment [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 1. Ensure that you have a Python version at least `Python v3.11` and `pip v23.3.1`
 2. Clone the repository https://github.com/fokhrun/restaurant_reservation.git as `restaurant_reservation` in your local directory
@@ -354,7 +378,7 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
 9. Run the app `flask run --debug`
 10. You can use `VSCode` as an editor
 
-## Add debugger
+### VSCode Debugger [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 Debugging a Flask app in `VSCode` involves setting up a launch configuration. 
 Here's an example configuration for debugging a Flask app in VSCode:
 
@@ -393,21 +417,21 @@ Here's an example configuration for debugging a Flask app in VSCode:
 - Start the debugger by pressing F5 or clicking on the debug icon in VSCode and selecting the Flask configuration you just created.
 - This setup will allow you to debug your Flask app by running it in debug mode within VSCode.
 
-## Language/Library requirements
+### Language/Library Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 
-### Non-compatible with flask-login and flask on versions
+#### Non-compatible with flask-login and flask on versions [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The current version of flask-login is not compatible with flask > 3.0. The fixes are in the way to make it work soon. More details can be found in this [issue](https://github.com/maxcountryman/flask-login/issues/805). Until then, it is recommended to use a widely accepted [temporary fix](https://github.com/maxcountryman/flask-login/issues/809).
 
-## Working with styling
+### Working With Styling [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 This project leverages `bootstrap` for default themse and `node-sass` for custom themse for styling. Working with the both locally using `npm`, which requires `node.js`. 
 Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages in locally. It requires defining a `package.json` file 
 where version of the libraties are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which
 should be include in the `.gitignore` folder.  
 
-### Working with ready to use theme
+#### Working with ready to use theme [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 To start leveraging ready made themse, we mainly work using `bootstrap`. In this project, we are working with `bootstrap@4.5`. To install `bootstrap`, run the following command: 
 
@@ -421,7 +445,7 @@ To work with bootstrap, just have to copy-paste the following stylesheet <link> 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 ```
 
-### Working with custom theme
+### Working With Custom Theme [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 We may want to influence coloring theme in a more custom manner than what `bootstrap` provides. A very good way to do it is using [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like 
 `node-sass` to compile `SCSS` files into `CSS`. To install `node-sass`, run the following command:
@@ -457,16 +481,18 @@ Here's an example of to do this in a Jinja2 template:
 
 Note that every time there is a change in the SCSS files, we need to recompile them into CSS.
 
-## Testing using Flask (unittest)
+### Testing [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+#### Running Tests [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 - Add test codes in `tests` folder
 - Run `flask test`
 
-### Test cases
+#### Test Cases [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-## Deployment to Heroku
+### Deployment To Production [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-### Preparation
+#### Preparation For Heroku Deployment [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 - runtime.txt: `Python` run time version
     - `python-3.11.6`
 - procfile: app exposed as `wsgi.py` with run command using `Gunicorn`
@@ -477,7 +503,7 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 - GitHub account connected to Heroku for free tier
 - 
 
-### Steps
+#### Deployment Steps [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 - Create a new app in [Heroku](https://dashboard.heroku.com/apps)
 - Fill the form with the app name, i.e., "restaurant-binita" and "Europe" as the region
 - Click [addons](https://elements.heroku.com/addons)
@@ -506,7 +532,7 @@ Note that every time there is a change in the SCSS files, we need to recompile t
     - Click "Deploy Branch" for the first manual push.
 - Select `Open app` to verify that the app got deployed.
 
-### Preparing production environment
+#### Preparing Production Environment [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 1. `gunicorn` is not supported in In Windows. you can use `waitress` instead. Follow these [guide](https://stackoverflow.com/questions/11087682/does-gunicorn-run-on-windows)
 2. To initialize the production database, change the `FLASK_CONFIG` to `production`
@@ -515,9 +541,7 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 5. Verify by login to the site using the newly created credentials and checking the reservations visibile to different users
 6. If there are errors, click `More` and use options, such as `View logs` or `Run console`
 
-# Credits
-
-## Images
+## Credits [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 Photos by:
 1. Chan Walrus: [front_image.jpg](https://www.pexels.com/photo/white-and-brown-cooked-dish-on-white-ceramic-bowls-958545/)
