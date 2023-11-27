@@ -120,6 +120,13 @@ The site has the following pages:
 
 ### High Level Architecture [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
+The following diagram provides the high-level architecture diagram for the site based on the tech stack mentioned in the previous slide.
+
+In the Flask app context, each URL corresponds to a route in the backend. There are two main groups of route families: `main` and `auth`. The `main` routes correspond to pages and their URLs about reservations and any general information about the restaurant, such as, `home`, `reserve`, `admin`, etc. The `auth` routes correspond to pages and their URLs about user authentication, such as `register`, `login`, `logout`, etc. The Flask app levrage blueprints to organize the routes. 
+
+For each `route`, there is a controlling function in the Flask app that receives a request for a URL (with its parameters). The app, configured appropriately, invokes the correct view function. For example, for the `<site-url>/reserve` URL, it leverages the `reserve()` controlling function. Each such function makes use of a set of forms, models, and template object. A form handles the backend aspect of some form element in the web page. For example, the page in the `<site-url>/reserve` URL has a date selector, which corresponds to a form object that defines its field data type and its validations. A model handles CRUD operations on a database table as well as additional functionality on table attributes. For example, the `reserve()` function requires authenticated login, the current state of the coming reservations, and manipulating reservations. The function interacts with models connected to user profiles and reservations. Through these models, the function interacts with actual database tables in a MySQL instance. Finally, for each URL there is an HTML templates, that are rendered with the values passed by the function in the browser. While working with these the app leverages a set of configuration (environment) variables that are available only in the hosted environment.
+
+
 ![High-level application architecture](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/flask_app_architecture.png)
 
 ## Key Implementation Aspects [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
