@@ -147,22 +147,30 @@ For each `route`, there is a controlling function in the Flask app that receives
         - view.py
     - templates/
         - *.html: views to be rendered in the site
-    - static/: images to be rendered on the site
+    - static/: contain static file
+        - css/: css file to render HTML pages in a certain style
+        - images/: images to be rendered on the site
+        - scss/: bootstrap theme generation files
+        - script/: javascript files
 - migrations/: database migration scripts
 - tests/: unit tests
     - main/: tests for app/main
     - auth/: tests for app/auth
     - test*.py: tests for files in app/
-- docs/: deep dive documentation
+- doc_images/: images for documentations
 - venv/: virtual environment for the local development, should not be tracked by git
-- .env/: key information to work with the flask app and local MySQL database
+- .env/: key information to work with the flask app and local MySQL database, should not be tracked by git
+- .env_template/: template for .env file containing key information to work with the flask app and local MySQL database, should not be renamed to .env
 - .gitignore: files and folders to be ignored, such venv, .env
 - LICENSE: source code usage and copy license
 - Procfile : app run command to be used in the Heroku production environment
 - runtime.txt: Python runtime to be used in the Heroku production environment
 - requirements.txt: Python library (and its version) to be used in development, testing, and production environment
 - config.py: configuration for Flask and MySQL in development, testing, and production environment
+- initialize_db.py: database initialization script to create tables and preliminary values
+- package.json: library version for node packages to be installed in the local environment using npm
 - wsgi.py: main entry point to run the app through the command line
+- README.md: master documentation file
 ```
 
 ### Flask App Factory [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
