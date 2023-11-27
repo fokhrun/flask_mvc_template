@@ -7,8 +7,8 @@
     - [Functional Requirements](https://github.com/fokhrun/restaurant_reservation#functional-requirements-)
     - [Technical Requirements](https://github.com/fokhrun/restaurant_reservation#technical-requirements-)
 - [Tecnical Design](https://github.com/fokhrun/restaurant_reservation#tecnical-design-)
-    - [High Level Tech Stack](https://github.com/fokhrun/restaurant_reservation#high-level-tech-stack-)
-    - [High Level Architecture](https://github.com/fokhrun/restaurant_reservation#high-level-architecture-)
+    - [High-Level Tech Stack](https://github.com/fokhrun/restaurant_reservation#high-level-tech-stack-)
+    - [High-Level Architecture](https://github.com/fokhrun/restaurant_reservation#high-level-architecture-)
 - [Key Implementation Aspects](https://github.com/fokhrun/restaurant_reservation#key-implementation-aspects-)
     - [Code Repository Structure](https://github.com/fokhrun/restaurant_reservation#code-repository-structure-)
     - [Flask App Factory](https://github.com/fokhrun/restaurant_reservation#flask-app-factory-)
@@ -42,10 +42,10 @@
 
 ## Overview [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-[Spice Magic](https://restaurant-binita-99be9591d7d4.herokuapp.com/) is a full stack restaurant website. The site provides 
+[Spice Magic](https://restaurant-binita-99be9591d7d4.herokuapp.com/) is a full-stack restaurant website. The site provides 
 - the site guests to see the restaurant menu
 - the site owner to manage reservations for its restaurant guests through a centrally managed reservation database
-- The site provides a role-based management of reservation database
+- The site provides role-based management of the reservation database
 
 ![Spice Magic Multi-Screen Screenshot](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/multi-screen.png)
 
@@ -54,51 +54,51 @@
 ### Functional Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The site supports three types of users:
-- `visitor`: can visit publicly available pages, anyone who landed in the site
+- `visitor`: can visit publicly available pages, anyone who landed on the site
 - `guest`: can reserve tables in the restaurant on his own
 - `admin`: 
     - can create reservation slots 
     - can cancel anyone's reservation (to handle unforeseeable situations)
-    - can book reservation on behalf of any restaurant customer (offline booking)
+    - can book reservations on behalf of any restaurant customer (offline booking)
 
 The site has the following pages: 
-1. `home`: provides information about the restaurant, such as cousine, menu, serving hours, contact, etc., for any site visitors
+1. `home`: provides information about the restaurant, such as cuisine, menu, serving hours, contact, etc., for any site visitors
 2. `registration`: registration for new guest users
 3. `login`: login for both `guest` and `admin` users
     a. any user can log in using his credentials
     b. `user` who cannot be authenticated are redirected to the login page with an error message 
 4. `reserve`: 
     1. `guest` can 
-        - view available reservations within the next two weeks from today 
-        - can see his resevations 
+        - see available reservations within the next two weeks from today 
+        - can see his reservations 
         - make reservations for any available time for any number of guests within the next two weeks from today
             - can add a remark about reservations
         - cancel already made reservations
-        - cannot reserve table reserved by someone else
+        - cannot reserve a table reserved by someone else
     2. `admin` can 
-        - view any reservations status of any table made by anyone
+        - see any reservation status of any table made by anyone
         - make reservations for anyone
             - can add a remark about reservations
         - cancel anyone's reservation
     3. `admin` can
-        - create new type of tables 
+        - create new types of tables 
         - remove any existing type of tables
         - create any new reservation slot
         - remove any existing reservation slot
 
 ### Technical Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
-- The site should be a full-stack website that is inspired by MVC framework with the following tech stack
+- The site should be a full-stack website that is inspired by the MVC framework with the following tech stack
     - Frontend implemented by HTML, CSS, and Javascript
     - Backend implemented by Python web frameworks
     - Database
-- It implement application features and business logic to manage, query and manipulate data to handle reservetion information stored in the chosen database platform using an ORM tool that goes with the chosen Python framework
-    - The Python code should be Written consistently using the PEP8 style guide
+- It implements application features and business logic to manage, query, and manipulate data to handle reservation information stored in the chosen database platform using an ORM tool that goes with the chosen Python framework
+    - The Python code should be written consistently using the PEP8 style guide
     - The Python code should handle the bulk of the business logic
-    - Adopt an MVC like design where models, views, and controllers are isolated for flexible manipulation
-    - Automated tests should be written for bulk of the Python code
-- The front-end meets a good accessibility guidelines, follows the principles of UX design, meets its given purpose and provides a set of user interactions
+    - Adopt an MVC-like design where models, views, and controllers are isolated for flexible manipulation
+    - Automated tests should be written for the bulk of the Python code
+- The front end meets a good accessibility guideline, follows the principles of UX design, meets its given purpose, and provides a set of user interactions
     - Implement forms with validations to create and edit models in the backend
-- It implements identification and apply authorisation, authentication and permission for users to handle reservations
+- It implements identification and applies authorization, authentication, and permission for users to handle reservations
     - Apply role-based login and registration functionality
     - The current login state is reflected to the user
     - Users should not be permitted to access restricted content or functionality prior to role-based login
@@ -122,10 +122,9 @@ The site has the following pages:
 
 The following diagram provides the high-level architecture diagram for the site based on the tech stack mentioned in the previous slide.
 
-In the Flask app context, each URL corresponds to a route in the backend. There are two main groups of route families: `main` and `auth`. The `main` routes correspond to pages and their URLs about reservations and any general information about the restaurant, such as, `home`, `reserve`, `admin`, etc. The `auth` routes correspond to pages and their URLs about user authentication, such as `register`, `login`, `logout`, etc. The Flask app levrage blueprints to organize the routes. 
+In the Flask app context, each URL corresponds to a route in the backend. There are two main groups of route families: `main` and `auth`. The `main` routes correspond to pages and their URLs about reservations and any general information about the restaurant, such as, `home`, `reserve`, `admin`, etc. The `auth` routes correspond to pages and their URLs about user authentication, such as `register`, `login`, `logout`, etc. The Flask app leverages blueprints to organize the routes. 
 
-For each `route`, there is a controlling function in the Flask app that receives a request for a URL (with its parameters). The app, configured appropriately, invokes the correct view function. For example, for the `<site-url>/reserve` URL, it leverages the `reserve()` controlling function. Each such function makes use of a set of forms, models, and template object. A form handles the backend aspect of some form element in the web page. For example, the page in the `<site-url>/reserve` URL has a date selector, which corresponds to a form object that defines its field data type and its validations. A model handles CRUD operations on a database table as well as additional functionality on table attributes. For example, the `reserve()` function requires authenticated login, the current state of the coming reservations, and manipulating reservations. The function interacts with models connected to user profiles and reservations. Through these models, the function interacts with actual database tables in a MySQL instance. Finally, for each URL there is an HTML templates, that are rendered with the values passed by the function in the browser. While working with these the app leverages a set of configuration (environment) variables that are available only in the hosted environment.
-
+For each `route`, there is a controlling function in the Flask app that receives a request for a URL (with its parameters). The app, configured appropriately, invokes the correct view function. For example, for the `<site-url>/reserve` URL, it leverages the `reserve()` controlling function. Each such function makes use of a set of forms, models, and template objects. A form handles the backend aspect of some form element in the web page. For example, the page in the `<site-url>/reserve` URL has a date selector, which corresponds to a form object that defines its field data type and its validations. A model handles CRUD operations on a database table as well as additional functionality on table attributes. For example, the `reserve()` function requires authenticated login, the current state of the coming reservations, and manipulating reservations. The function interacts with models connected to user profiles and reservations. Through these models, the function interacts with actual database tables in a MySQL instance. Finally, for each URL there is an HTML template, that is rendered with the values passed by the function in the browser. While working with these the app leverages a set of configuration (environment) variables that are available only in the hosted environment.
 
 ![High-level application architecture](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/flask_app_architecture.png)
 
@@ -134,51 +133,51 @@ For each `route`, there is a controlling function in the Flask app that receives
 ### Code Repository Structure [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ```
-- app/ : source code for the flask app
-    - __init__.py : include app factory method where blueprints, migration handler, database handler, login manager, etc., are registered
-    - models.py : include data models used in the app to interact with the database
+- app/: source code for the flask app
+    - __init__.py: include app factory method where blueprints, migration handler, database handler, login manager, etc., are registered
+    - models.py: include data models used in the app to interact with the database
     - main/ : placeholder for main routes /, /reserve, and /admin
         - __init__.py : define the /main blueprint (for /, /reserve, /admin routes)
-        - forms.py : form objects to interact with forms in the front end
-        - views.py : route handlers (controller part of MVC) for /, /reserve, and /admin 
-        - errors.py : error handlers, such as 404, 500, etc.
-        - *.py : other helper modules to support route handlers in views.py
-    - auth/ : placeholder for auth routes /login
-        - __init__.py : define the /auth blueprint ()
+        - forms.py: form objects to interact with forms in the front end
+        - views.py: route handlers (controller part of MVC) for /, /reserve, and /admin 
+        - errors.py: error handlers, such as 404, 500, etc.
+        - *.py: other helper modules to support route handlers in views.py
+    - auth/: placeholder for auth routes /login
+        - __init__.py: define the /auth blueprint ()
         - view.py
     - templates/
-        - *.html : views to be rendered in the site
-    - static/ : images to be rendered in the site
-- migrations/ : database migration scripts
-- tests/ : unit tests
-    - main/ : tests for app/main
-    - auth/ : tests for app/auth
-    - test*.py : tests for files in app/
-- docs/ : deep dive documentations
-- venv/ : virtual environment for the local development, should not be tracked by git
-- .env/ : key information to work with the flask app and local MySQL database
-- .gitignore : files and foldered to be ignored, such venv, .env
-- LICENSE : source code usage and copy license
-- Procfile : app run command to be used in the heroko production environment
-- runtime.txt : Python runtime to be used in the heroku production environment
-- requirements.txt : Python library (and its version) to be used development, testing, and production environment
-- config.py : configuration for flask and MySQL in development, testing, and production environment
-- wsgi.py : main entry point to run the app through command line
+        - *.html: views to be rendered in the site
+    - static/: images to be rendered on the site
+- migrations/: database migration scripts
+- tests/: unit tests
+    - main/: tests for app/main
+    - auth/: tests for app/auth
+    - test*.py: tests for files in app/
+- docs/: deep dive documentation
+- venv/: virtual environment for the local development, should not be tracked by git
+- .env/: key information to work with the flask app and local MySQL database
+- .gitignore: files and folders to be ignored, such venv, .env
+- LICENSE: source code usage and copy license
+- Procfile : app run command to be used in the Heroku production environment
+- runtime.txt: Python runtime to be used in the Heroku production environment
+- requirements.txt: Python library (and its version) to be used in development, testing, and production environment
+- config.py: configuration for Flask and MySQL in development, testing, and production environment
+- wsgi.py: main entry point to run the app through the command line
 ```
 
 ### Flask App Factory [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delay the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration, but also the ability  to create multiple application instances—another thing that can be very useful during testing.
+Typically a flask app is created in a single-file version advocated by many sources. Such an application is created in the global scope, there is no way to apply configuration changes dynamically. So it is too late to make configuration changes, which can be important for unit tests. We deal with this problem we delaying the creation of the application by moving it into a factory function that can be explicitly invoked from the script. This not only gives the script time to set the configuration but also the ability  to create multiple application instances—another thing that can be very useful during testing.
 
 Check `app\__init__.py` for more details.
 
 #### Flask Blueprints [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in factory app creation 
+Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in the factory app creation 
 method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. The `main` blueprint covers 
 the common routes in `app\main\views.py`. 
 
-Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py` and `app\main\erorrs.py` for more details.
+Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py`, and `app\main\erorrs.py` for more details.
 
 ### Data model [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -186,18 +185,18 @@ Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py` and `app\ma
 
 ### Flask Templates [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-Flask leverages `jinja2` based [templates](https://flask.palletsprojects.com/en/1.1.x/tutorial/templates/) that basically injects input from backend to be rendered to the frontend.
-It uses `render_template` function that is typically included in a function that handles a `route`. From `index.html` is a template in `app\main\templates` that will be rendered by `render_template` a function named `index()` that is decordated with `@app.route("\")` in `views.py`. When a request for such a route comes from the site, it leverages that `index()`
+Flask leverages `jinja2` based [templates](https://flask.palletsprojects.com/en/1.1.x/tutorial/templates/) that basically injects input from the backend to be rendered to the frontend.
+It uses the `render_template` function that is typically included in a function that handles a `route`. From `index.html` is a template in `app\main\templates` that will be rendered by `render_template` a function named `index()` that is decorated with `@app.route("\")` in `views.py`. When a request for such a route comes from the site, it leverages that `index()`
 which at the end will call `render_template("main.index.html")`. Note that `main` is the blueprint where the route is managed. The function can provide additional parameters as 
-keyword arguments, which can be input from the front end, but can also be additional parameters managed by the function. 
+keyword arguments, which can be input from the front end but can also be additional parameters managed by the function. 
 
 ### Handling Authentication [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The site admin can reserve tables on behalf of any restaurant guests. However, the site provides fine-grained table reservation capability to authenticated users as follows:
 
-- Site visitors can register using their name, email-addresses, passwords known to them. 
-- Registered site `guests` can login using their email address and password to start using fine-grained reservation functionality
-- `admin` is precreated by the site admin, who maintains the site. Once it is created, the `admin` can carry out advanced tasks on the reservations.
+- Site visitors can register using their names, email addresses, and passwords known to them. 
+- Registered site `guests` can log in using their email address and password to start using fine-grained reservation functionality
+- `admin` is pre-created by the site admin, who maintains the site. Once it is created, the `admin` can carry out advanced tasks on the reservations.
 
 #### Authentication Related Flask Libraries [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -235,15 +234,15 @@ def verify_password(self, password):
 ```
 
 The password hashing function is implemented through a write-only property called `password`. When this property is set, the setter method will call
-`generate_password_hash()` function and write the result to the `password_hash` field. Attempting to read the password property will return an error, 
+the `generate_password_hash()` function and write the result to the `password_hash` field. Attempting to read the password property will return an error, 
 as clearly the original password cannot be recovered once hashed.
 
-The `verify_password()` method takes a password and passes it to `check_password_hash()` function for verification against the hashed version stored 
+The `verify_password()` method takes a password and passes it to the `check_password_hash()` function for verification against the hashed version stored 
 in the `User` model. If this method returns True, then the password is correct.
 
 #### Authentication Blueprint [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-The routes related to the user authentication subsystem will be added to a blueprint called `auth` that manages `login`, `logout`, and `register` routes. 
+The routes related to the user authentication subsystem will be added to a blueprint called `auth` that manages the `login`, `logout`, and `register` routes. 
 
 #### User Authentication [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -277,7 +276,7 @@ def create_app(config_name):
 ```
 
 `flask-login` requires the application to designate a function to be invoked when the extension needs to load a user from the database given its identifier. It is done through
-`user_loader` decorator that register the function with `flask-login`, which will call it when it needs to retrieve information about the logged-in user. The user identifier will be passed as a string, so the function converts it to an integer before it passes it to the `SQLAlchemy` query that loads the user. The return value of the function must be the user object, or `None` if the user identifier is invalid or any other error occurred. Check out the following implementation:
+the `user_loader` decorator that registers the function with `flask-login`, which will call it when it needs to retrieve information about the logged-in user. The user identifier will be passed as a string, so the function converts it to an integer before it passes it to the `SQLAlchemy` query that loads the user. The return value of the function must be the user object, or `None` if the user identifier is invalid or any other error occurred. Check out the following implementation:
 
 ```
 @login_manager.user_loader
@@ -301,7 +300,7 @@ def secret():
 
 #### Login Form [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-The login form that will be presented to users has a text field for the email address, a password field, a “remember me” checkbox, and a submit button. In addition
+The login form that will be presented to users has a text field for the email address, a password field, a “remember me” checkbox, and a submit button. In addition,
 a set of validators needs to be implemented to ensure that wrong inputs are not passed. All of these are very straightforward to implement using `flask-wtf` and `wtforms`. 
 
 Check out the following example, which is a skeleton for our implementation: 
@@ -325,7 +324,7 @@ looks like the following screenshots.
 
 ![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/register_login_screens.png)
 
-The main code that handles these templates are placed in `base.html` template using the following code snippet. 
+The main code that handles these templates is placed in the `base.html` template using the following code snippet. 
 
 ```
 <ul class="nav navbar-nav navbar-right">
@@ -337,8 +336,7 @@ The main code that handles these templates are placed in `base.html` template us
 </ul>
 ```
 
-The following image show how the rendering of these code snippets happen in the frontend. It also shows how flash message 
-is shown to the user, when a user logs out or inputs wrong email address or password.
+The following image shows how the rendering of these code snippets happens in the front end. It also shows how to flash message is shown to the user, when a user logs out or inputs the wrong email address or password.
 
 ![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flash_screen.png)
 
@@ -350,20 +348,20 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
 
 ## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-- Make role of `User` model non-nullable
-- Add more unittests for `app/main/views`
+- Make the role of the `User` model non-nullable
+- Add more unit tests for `app/main/views`
 - Add Javascript-based validation for the login/registration pages
-- Add a more elegant reservation system where a user do not have to mention which table, rather the guest number
+- Add a more elegant reservation system where a user does not have to mention which table, rather the guest number
 - Add a mechanism to provide remarks for reservations
-- Add a mechanism for the site admin to handle reservation request through an approval flow
-- Add Email-based two step registration process for new users
-- Add a mechanism to reset password by an existing user
+- Add a mechanism for the site admin to handle reservation requests through an approval flow
+- Add an Email-based two-step registration process for new users
+- Add a mechanism to reset passwords by an existing user
 
 ## Developer Guide [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ### Developer Environment [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-1. Ensure that you have a Python version at least `Python v3.11` and `pip v23.3.1`
+1. Ensure that you have a Python version of at least `Python v3.11` and `pip v23.3.1`
 2. Clone the repository https://github.com/fokhrun/restaurant_reservation.git as `restaurant_reservation` in your local directory
 3. Work inside `restaurant_reservation`
 2. Create a virtual environment using `venv`:
@@ -374,11 +372,11 @@ is shown to the user, when a user logs out or inputs wrong email address or pass
     ```
 5. Download and install MySQL v8.0.35 or upwards from `https://dev.mysql.com/downloads/installer/`
 6. Setup a database `restaurant_dev`
-7. Make a copy of `.env_template` as `.env` and fill in the missing valuesg
-8. Initialize the database with right tables and their starter values by running `python .\iniatialize_db.py`. It creates 
+7. Make a copy of `.env_template` as `.env` and fill in the missing values
+8. Initialize the database with the right tables and their starter values by running `python .\iniatialize_db.py`. It creates 
     - 2 roles: `Admin` and `Guests`
     - 3 users: 1 `Admin` type and 2 `Guests` type
-    - 6 tables of different capacitites
+    - 6 tables of different capacities
     - 6 (table) * 2 (slot per day) * 30 (days for November 2023) to create all reservation slots for November
 9. Run the app `flask run --debug`
 10. You can use `VSCode` as an editor
@@ -389,7 +387,7 @@ Here's an example configuration for debugging a Flask app in VSCode:
 
 - Open your Flask project in `VSCode`
 - Create a `launch.json` file inside the `.vscode` directory in your project if it doesn't exist.
-- VSCode will auto generate the `launch.json` if you provide correct options, for example python, then Python: Flask, and wsgi.py
+- VSCode will auto-generate the `launch.json` if you provide correct options, for example, python, then Python: Flask, and wsgi.py
 
 """
     {
@@ -431,20 +429,20 @@ The current version of flask-login is not compatible with flask > 3.0. The fixes
 
 ### Working With Styling [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-This project leverages `bootstrap` for default themse and `node-sass` for custom themse for styling. Working with the both locally using `npm`, which requires `node.js`. 
-Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages in locally. It requires defining a `package.json` file 
-where version of the libraties are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which
-should be include in the `.gitignore` folder.  
+This project leverages `bootstrap` for default themes and `node-sass` for custom themes for styling. Working with both locally using `npm`, which requires `node.js`. 
+Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages locally. It requires defining a `package.json` file 
+where versions of the libraries are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which
+should be included in the `.gitignore` folder.  
 
-#### Working with ready to use theme [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+#### Working with ready-to-use theme [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-To start leveraging ready made themse, we mainly work using `bootstrap`. In this project, we are working with `bootstrap@4.5`. To install `bootstrap`, run the following command: 
+To start leveraging ready-made themes, we mainly work using `bootstrap`. In this project, we are working with `bootstrap@4.5`. To install `bootstrap`, run the following command: 
 
 ```
 npm install bootstrap
 ```
 
-To work with bootstrap, just have to copy-paste the following stylesheet <link> into the <head> of `base.html`, which is used in all other html files.
+To work with Bootstrap, just have to copy-paste the following stylesheet <link> into the <head> of `base.html`, which is used in all other html files.
 
 ```
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -452,7 +450,7 @@ To work with bootstrap, just have to copy-paste the following stylesheet <link> 
 
 ### Working With Custom Theme [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-We may want to influence coloring theme in a more custom manner than what `bootstrap` provides. A very good way to do it is using [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like 
+We may want to influence the coloring theme in a more custom manner than what `bootstrap` provides. A very good way to do it is using [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like 
 `node-sass` to compile `SCSS` files into `CSS`. To install `node-sass`, run the following command:
 
 ```
@@ -468,7 +466,7 @@ To add global `SCSS` in a `Flask` application, we need to compile the SCSS files
     @import "theme_color";
     @import "./node_modules/bootstrap/scss/bootstrap";
     ```
-    Here the `theme_color` is an another scss file where the theme colors are defined. 
+    Here the `theme_color` is another scss file where the theme colors are defined. 
 
 - Compile the SCSS file into a CSS file using node-sass:
 
@@ -476,9 +474,9 @@ To add global `SCSS` in a `Flask` application, we need to compile the SCSS files
 node-sass app/static/scss/main.scss app/static/css/main.css
 ```
 
-- To use the `main.css` overriding bootstrap themes, link to the it using the url_for function. This line should be placed inside the <head> tag of `base.html`.
+- To use the `main.css` overriding bootstrap themes, link to it using the url_for function. This line should be placed inside the <head> tag of `base.html`.
 
-Here's an example of to do this in a Jinja2 template:
+Here's an example of how to do this in a Jinja2 template:
 
 ```
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
@@ -490,7 +488,7 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 
 #### Running Tests [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-- Add test codes in `tests` folder
+- Add test codes in the `tests` folder
 - Run `flask test`
 
 #### Test Cases [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
@@ -499,16 +497,16 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 
 #### Front End Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 - `HTML`: codes have been validated using `https://validator.w3.org/`. No errors or warnings are reported after fixing some minor mistakes
-- `CSS`: codes are generated using the `node-sass`, which makes w3c validator `https://jigsaw.w3.org/css-validator` non applicable. 
+- `CSS`: codes are generated using the `node-sass`, which makes the w3c validator `https://jigsaw.w3.org/css-validator` non-applicable. 
 - `Javascript`: no manual javascript has been added yet. 
-- Overall: `Lighthouse` test has given a high rating higher 90s in Performance, Accessibility, and Best Practices for all pages.
+- Overall: The `Lighthouse` test has given a high rating higher 90 in Performance, Accessibility, and Best Practices for all pages.
 
 #### Backend Code Readability [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The code is validated using the command `pylint --max-line-length=120`. The max line length is changed from 80 to 120 to achieve optimal 
 readability in modern screens.
 
-The following warnings has been suppressed to handle special cases:
+The following warnings have been suppressed to handle special cases:
 - `# pylint: disable=C0415` in `app\__init__.py`
 - `# pylint: disable=C0413, R0401` in `app\main\__init__.py`
 - `# pylint: disable=W0613` in `app\main\errors.py`
@@ -544,7 +542,7 @@ Apart from these, there are no other errors or warnings reported by `pylint`.
             - `Database`
 - Select `Settings`
     - Add `heroku/python` build pack
-    - Add the following config vars that mimics `.env` file in the local environment
+    - Add the following config vars that mimic `.env` file in the local environment
         - `JAWSDB_URL`: `Connection String` in Kitefin Server
         - `FLASK_CONFIG`: production
         - `DATABASE PROD`: `Database` in Kitefin Server
@@ -558,7 +556,7 @@ Apart from these, there are no other errors or warnings reported by `pylint`.
     - Choose the default branch to deploy, i.e., the `main` branch
     - Click "Enable Automatic Deploys" which allows the app to be redeployed for every commit.
     - Click "Deploy Branch" for the first manual push.
-- Select `Open app` to verify that the app got deployed.
+- Select `Open app` to verify that the app has deployed.
 
 #### Preparing Production Environment [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -566,7 +564,7 @@ Apart from these, there are no other errors or warnings reported by `pylint`.
 2. To initialize the production database, change the `FLASK_CONFIG` to `production`
 3. run `python .\iniatialize_db.py` to create the initial roles, users, tables, and reservations
 4. Run the app by clicking the `Open App`
-5. Verify by login to the site using the newly created credentials and checking the reservations visibile to different users
+5. Verify by login to the site using the newly created credentials and checking the reservations visible to different users
 6. If there are errors, click `More` and use options, such as `View logs` or `Run console`
 
 ## Credits [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
