@@ -30,7 +30,6 @@ import unittest
 
 class TestTableReservation(FlaskAppTestCase):
 
-
     def test_table_reservation_view(self):
         self.app.config["LOGIN_DISABLED"] = True
         view_path = "app.main.views"

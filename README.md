@@ -401,17 +401,6 @@ The following image shows how the rendering of these code snippets happens in th
 
 ![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
 
-## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
-
-- Make the role of the `User` model non-nullable
-- Add more unit tests for `app/main/views`
-- Add Javascript-based validation for the login/registration pages
-- Add a more elegant reservation system where a user does not have to mention which table, rather the guest number
-- Add a mechanism to provide remarks for reservations
-- Add a mechanism for the site admin to handle reservation requests through an approval flow
-- Add an Email-based two-step registration process for new users
-- Add a mechanism to reset passwords by an existing user
-
 ## Developer Guide [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 ### Developer Environment [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
@@ -524,12 +513,57 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 
 ### Testing & Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
+We leverage `unittest` library for Python code testing. Some example of vanilla usage of the `TestCase` class of the module can be found in `tests\main\test_utils.py`, which tests python functions in `app\main\utils.py`. Often times testing requires mocking certain function call so that the test focuses only on the logic part of the code instead of implementing all depdencies. Refer to the implementation of `TestModelUtils` in `app\main\utils.py` for testing using mock. 
+
 #### Running Tests [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-- Add test codes in the `tests` folder
-- Run `flask test`
+We added a custom command with flask to run the tests by implementing the following function in `wsgi.py`.
+
+```
+@app.cli.command()
+def test():
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner(verbosity=2).run(tests)
+```
+
+To work with the tests
+
+- Add test codes in the `tests` or its subfolders (follow the app folder structure)
+- Run `flask test` or `flask test tests.<specific test folder or file inside test>` 
+
+We are also measure the test coverage using the `coverage` module. See `wsgi.test` for more details.
 
 #### Test Cases [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+Testing some of the function requires an application. It requires creation of flask test app using the `TestConfig` in `config.py`. It can be implemented using the following class:
+
+```
+class FlaskAppTestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app("testing")
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+        self.client = self.app.test_client(use_cookies=True)
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
+```
+
+This class can be used as `TestTableReservation(FlaskAppTestCase)`, which inherits its `setUp` and `tearDown` functions unless overridden.
+
+We implemented the following test cases using this class:
+
+
+
+We defined another class named `FlaskAppTestCaseWithModels`, which creates the test app and populates the test database with some dummy tables and entries based on our models. This class is used when the models needs to be accessed. Both these classes are defined in `tests\utils.py`.
+
+We implemented the following test cases using this class:
+
+- A user is an admin user
+- Information about reservations are fetched
 
 ### Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -604,6 +638,17 @@ Apart from these, there are no other errors or warnings reported by `pylint`.
 4. Run the app by clicking the `Open App`
 5. Verify by login to the site using the newly created credentials and checking the reservations visible to different users
 6. If there are errors, click `More` and use options, such as `View logs` or `Run console`
+
+## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+- Make the role of the `User` model non-nullable
+- Add more unit tests for `app/main/views`
+- Add Javascript-based validation for the login/registration pages
+- Add a more elegant reservation system where a user does not have to mention which table, rather the guest number
+- Add a mechanism to provide remarks for reservations
+- Add a mechanism for the site admin to handle reservation requests through an approval flow
+- Add an Email-based two-step registration process for new users
+- Add a mechanism to reset passwords by an existing user
 
 ## Credits [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 

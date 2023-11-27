@@ -1,11 +1,10 @@
 {% extends "base.html" %}
-
 {% block title %}Register{% endblock %}
 
 {% block page_content %}
 <div class="col-md-6 p-5 mx-auto mt-5 border rounded">
     <h2>Register</h2>
-    <form method="POST" action="{{ url_for('auth.register') }}">
+    <form method="POST" action="{{ url_for('auth.register') }}" id="registration">
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.username.label(class="form-control-label") }}
@@ -28,4 +27,8 @@
         </div>
     </form>
 </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
 {% endblock %}
