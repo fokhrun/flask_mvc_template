@@ -27,7 +27,6 @@
         - [Login and Registration Form](https://github.com/fokhrun/restaurant_reservation#login-and-registration-form-)
         - [Authentication Templates](https://github.com/fokhrun/restaurant_reservation#authentication-templates-)
     - [Handling Reservation](https://github.com/fokhrun/restaurant_reservation#handling-reservation-)
-- [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements-)
 - [Developer Guide](https://github.com/fokhrun/restaurant_reservation#developer-guide-)
     - [Developer Environment](https://github.com/fokhrun/restaurant_reservation#developer-environment-)
     - [VSCode Debugger](https://github.com/fokhrun/restaurant_reservation#vscode-debugger-)
@@ -40,6 +39,7 @@
     - [Preparation For Heroku Deployment](https://github.com/fokhrun/restaurant_reservation#preparation-for-heroku-deployment-)
     - [Deployment Steps](https://github.com/fokhrun/restaurant_reservation#deployment-steps-)
     - [Preparing Production Environment](https://github.com/fokhrun/restaurant_reservation#preparing-production-environment-)
+- [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements-)
 - [Credits](https://github.com/fokhrun/restaurant_reservation#credits-)
 
 ## Overview [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
