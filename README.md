@@ -554,7 +554,7 @@ Here's an example configuration for debugging a Flask app in VSCode:
 - Start the debugger by pressing F5 or clicking on the debug icon in VSCode and selecting the Flask configuration you just created.
 - This setup will allow you to debug your Flask app by running it in debug mode within VSCode.
 
-### Language/Library Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+### Language And Library Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The two main languages that leverage libraries are `Python` and `Javascript`. 
 
