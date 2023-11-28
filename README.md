@@ -39,6 +39,7 @@
     - [Preparation For Heroku Deployment](https://github.com/fokhrun/restaurant_reservation#preparation-for-heroku-deployment-)
     - [Deployment Steps](https://github.com/fokhrun/restaurant_reservation#deployment-steps-)
     - [Preparing Production Environment](https://github.com/fokhrun/restaurant_reservation#preparing-production-environment-)
+- [Bugs](https://github.com/fokhrun/restaurant_reservation#bugs)
 - [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements-)
 - [Credits](https://github.com/fokhrun/restaurant_reservation#credits-)
 
@@ -729,16 +730,29 @@ Apart from these, there are no other errors or warnings reported by `pylint`.
 5. Verify by login to the site using the newly created credentials and checking the reservations visible to different users
 6. If there are errors, click `More` and use options, such as `View logs` or `Run console`
 
+## Bugs [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+Fixed Bugs:
+- Reservation status change request did not update status
+- Reservation status change updated for wrong users
+- New reservation slots were not created
+- Accidentally removed Gunicorn that blocked production deployment
+- Wrong ID used for form validation
+
+Open Issues:
+- Make the role of the `User` model non-nullable
+- Front-end validation methods do not disappear at the right time
+
 ## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-- Make the role of the `User` model non-nullable
-- Add more unit tests for `app/main/views`
+- A more consistent and richer form validation
+- Add more unit tests for `app\auth\forms.py`, `app\auth\views.py`, `app\main\views.py`, `app\models.py`, `app\main\errors.py`
 - Add Javascript-based validation for the login/registration pages
 - Add a more elegant reservation system where a user does not have to mention which table, rather the guest number
 - Add a mechanism to provide remarks for reservations
 - Add a mechanism for the site admin to handle reservation requests through an approval flow
 - Add an Email-based two-step registration process for new users
-- Add a mechanism to reset passwords by an existing user
+- Add a mechanism to reset passwords of an existing user
 
 ## Credits [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
