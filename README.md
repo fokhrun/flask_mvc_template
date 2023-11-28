@@ -23,7 +23,7 @@
         - [Authentication Blueprint](https://github.com/fokhrun/restaurant_reservation#authentication-blueprint-)
         - [User Authentication](https://github.com/fokhrun/restaurant_reservation#user-authentication-)
         - [Protecting Routes](https://github.com/fokhrun/restaurant_reservation#protecting-routes-)
-        - [Login Form](https://github.com/fokhrun/restaurant_reservation#login-form-)
+        - [Login and Registration Form](https://github.com/fokhrun/restaurant_reservation#login-and-registration-form)
         - [Authentication Templates](https://github.com/fokhrun/restaurant_reservation#authentication-templates-)
     - [Handling Reservation](https://github.com/fokhrun/restaurant_reservation#handling-reservation-)
 - [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements-)
@@ -385,10 +385,9 @@ def secret():
     return 'Only authenticated users are allowed!'
 ```
 
-#### Login Form [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+#### Login and Registration Form [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-The login form that will be presented to users has a text field for the email address, a password field, a “remember me” checkbox, and a submit button. In addition,
-a set of validators needs to be implemented to ensure that wrong inputs are not passed. All of these are very straightforward to implement using `flask-wtf` and `wtforms`. 
+The login form that will be presented to users has a text field for the email address, a password field, a “remember me” checkbox, and a submit button. In addition, a set of validators needs to be implemented to ensure that wrong inputs are not passed. All of these are very straightforward to implement using `flask-wtf` and `wtforms`. 
 
 Check out the following example, which is a skeleton for our implementation: 
 
@@ -404,14 +403,22 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Log In')
 ```
 
+Other validations have been implemented that makes it safer for users to work with the login form as illustrated by the following image:
+- Image 1 shows an empty form 
+- Image 2 shows the state when a mandatory field is left empty. This validation has been implemented using `flask-wtf` library
+- Image 3 shows the state when an input has been provided in an incorrect format. This validation has been implemented using custom Javascript in `app\static\javascript\script.js`.
+- Image 4 shows the state when an incorrect input is provided. The flash messsage is actually returned by the controlling function after validation failed in the backend.
+
+![Login Screen With Validations](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_screen_multiple.png)
+
+Similar design has been applied to registration form as illustrated below:
+
+![Registration Screen With Validations](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/registration_form_multiple_screen_multiple.png)
+
+
 #### Authentication Templates [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-We implemented two templates namely `login.html` and `logout.html` that have similar designs. These templates can be found in the `app\templates\auth` folder. The rendered pages 
-looks like the following screenshots.
-
-![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/register_login_screens.png)
-
-The main code that handles these templates is placed in the `base.html` template using the following code snippet. 
+We implemented two templates namely `login.html` and `logout.html` that have similar designs. These templates can be found in the `app\templates\auth` folder. The previous section shows how the screens are rendered. The main code that handles these templates is placed in the `base.html` template using the following code snippet. 
 
 ```
 <ul class="nav navbar-nav navbar-right">
@@ -423,9 +430,26 @@ The main code that handles these templates is placed in the `base.html` template
 </ul>
 ```
 
-The following image shows how the rendering of these code snippets happens in the front end. It also shows how to flash message is shown to the user, when a user logs out or inputs the wrong email address or password.
+The following image how the login and logout flow shows up in the navigation menu. 
 
-![Register and Login](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flash_screen.png)
+![Login and Logout Flow](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flow.png.png)
+
+Note that `base.html` template also provides the following script.
+
+```
+{% block scripts %}
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}
+```
+This script is imported in `login.html` and `register.html` as follows. 
+
+```
+{% block scripts %}
+    {{ super() }}
+{% endblock %}
+```
+
+The script primarily handles custom validation on the registration and login form rendered on the page. It basically checks `username`, `email address`, and `password` conforms to a certain structure. For more details, check `app\static\javascript\script.js`.
 
 ### Handling Reservation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
