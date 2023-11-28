@@ -17,6 +17,7 @@
     - [Data Model](https://github.com/fokhrun/restaurant_reservation#data-model-)
         - [Database Management](https://github.com/fokhrun/restaurant_reservation#database-management-)
     - [Flask Templates](https://github.com/fokhrun/restaurant_reservation#flask-templates-)
+    - [Base Template](https://github.com/fokhrun/restaurant_reservation#base-template-)
     - [Handling Authentications](https://github.com/fokhrun/restaurant_reservation#handling-authentication-)
         - [Authentication Related Flask Libraries](https://github.com/fokhrun/restaurant_reservation#authentication-related-flask-libraries-)
         - [Password Security](https://github.com/fokhrun/restaurant_reservation#password-security-)
@@ -275,7 +276,28 @@ Whenever there is a change in Model objects, line 2 should be executed again. On
 Flask leverages `jinja2` based [templates](https://flask.palletsprojects.com/en/1.1.x/tutorial/templates/) that basically injects input from the backend to be rendered to the frontend.
 It uses the `render_template` function that is typically included in a function that handles a `route`. From `index.html` is a template in `app\main\templates` that will be rendered by `render_template` a function named `index()` that is decorated with `@app.route("\")` in `views.py`. When a request for such a route comes from the site, it leverages that `index()`
 which at the end will call `render_template("main.index.html")`. Note that `main` is the blueprint where the route is managed. The function can provide additional parameters as 
-keyword arguments, which can be input from the front end but can also be additional parameters managed by the function. 
+keyword arguments, which can be input from the front end but can also be additional parameters managed by the function.
+
+#### Base Template [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+
+All the templates extends the `base.html` template as follows `{% extends "base.html" %}`. 
+
+The base templates provides common
+- <head> section, which includes the same page title and css 
+- site navigation menu
+- login/logout segment
+- flash message block
+- page content block that is overriden by <body> segments of other pages
+- script block for jquery and bootstrap
+- script block that is imported and can be extended by other pages
+- footer section provided key information about the restaurent
+
+The following image shows how the front page is visually extended with site navigation menu, login/logout segment, and the footer section.
+![front Screen Marked](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/front_screen_marked.png)
+
+
+Note that the site navigation bar varies based on the type of users as illustrated by the following images. This goes in line with the functional requirement of the site. 
+![Site Menu](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/site_menu.png)
 
 ### Handling Authentication [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
