@@ -659,10 +659,38 @@ We implemented the following test cases using this class:
 
 ### Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
+#### Manual Testing
+
+The following manual testing has been carried out and validated
+
+- Interactions with site navigation has been thorougly tested
+    - Only Home (`Spice Magic`) and Restaurant `menu` navigation open to every site visitor
+    - In addition to the above, the `Reserve` navigation is available to every authenticated user
+    - In addition to the above, the `Admin` navigation is avialable to restaurant `admin` user
+- Registration and Login
+    - Only authenticated `guest` can be created using the registration link
+    - While creating the `guest` using registration or login with an existing credention, the validations must pass to proceed
+        - all entries has to be provided
+        - `username` with length 5, this can be changed to a different length later on
+        - `email` with the right structure
+        - `password` with length 3, this can be changed to a different length later on 
+        - `password` has to confirmed by entering twice (in registration)
+    - Only `registered` user can log in
+    - `Admin` user can only be created using the dev team, using the initialization script or manually
+- Reservation
+    - All authenticated `user` can reserve any available slots
+    - All authenticated `user` can unreserve their current slots
+    - Only reservation `Admin` can unreserve other `user` slots
+- Reservation Admin
+    - Only reservation `Admin` can create new reservations
+    - New reservations can be created 4 weeks ahead of time from the currently available slots
+
 #### Front End Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
-- `HTML`: codes have been validated using `https://validator.w3.org/`. No errors or warnings are reported after fixing some minor mistakes
+    
+    namenu, buttons to from footer to the top, 
+- `HTML`: codes have been validated using `https://validator.w3.org/`. No errors or warnings are reported after fixing some minor mistakes.
 - `CSS`: codes are generated using the `node-sass`, which makes the w3c validator `https://jigsaw.w3.org/css-validator` non-applicable. 
-- `Javascript`: no manual javascript has been added yet. 
+- `Javascript`: no automated test for javascript has been added yet. 
 - Overall: The `Lighthouse` test has given a high rating higher 90 in Performance, Accessibility, and Best Practices for all pages.
 
 #### Backend Code Readability [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
@@ -742,17 +770,23 @@ Fixed Bugs:
 Open Issues:
 - Make the role of the `User` model non-nullable
 - Front-end validation methods do not disappear at the right time
+- User can reserve for past days, which should not be allowed
+- Use lower resolution images to load the site faster
 
 ## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 - A more consistent and richer form validation
 - Add more unit tests for `app\auth\forms.py`, `app\auth\views.py`, `app\main\views.py`, `app\models.py`, `app\main\errors.py`
+- Add more mocking based tests where the database and api are involved
 - Add Javascript-based validation for the login/registration pages
 - Add a more elegant reservation system where a user does not have to mention which table, rather the guest number
 - Add a mechanism to provide remarks for reservations
 - Add a mechanism for the site admin to handle reservation requests through an approval flow
 - Add an Email-based two-step registration process for new users
 - Add a mechanism to reset passwords of an existing user
+- Add a mechanism to remove daily, weekly, and monthly reservation slots
+- Add a mechanism send email to users about reservation
+- Add a better admin panel for creating/deleting/updating reservation slots for the admin 
 
 ## Credits [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
