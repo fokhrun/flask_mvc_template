@@ -601,7 +601,7 @@ Here's an example of how to do this in a Jinja2 template:
 
 Note that every time there is a change in the SCSS files, we need to recompile them into CSS.
 
-### Testing & Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+### Testing And Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 We leverage `unittest` library for Python code testing. Some examples of vanilla usage of the `TestCase` class of the module can be found in `tests\main\test_utils.py`, which tests Python functions in `app\main\utils.py`. Often times testing requires mocking certain function calls so that the test focuses only on the logic part of the code instead of implementing all dependencies. Refer to the implementation of `TestModelUtils` in `app\main\utils.py` for testing using mock. 
 
@@ -688,7 +688,6 @@ Apart from these, there are no other errors or warnings reported by `pylint`.
     - manually crafted or run `pip freeze > requirements.txt` in the local virtualenv
 - "Eco Dynos Plan" in Heroku
 - GitHub account connected to Heroku for free tier
-- 
 
 #### Deployment Steps [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 - Create a new app in [Heroku](https://dashboard.heroku.com/apps)
