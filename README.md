@@ -13,7 +13,7 @@
     - [Code Repository Structure](https://github.com/fokhrun/restaurant_reservation#code-repository-structure-)
     - [Flask App Factory](https://github.com/fokhrun/restaurant_reservation#flask-app-factory-)
         - [Flask Blueprints](https://github.com/fokhrun/restaurant_reservation#flask-blueprints-)
-    - [Application Script](https://github.com/fokhrun/restaurant_reservation#application-script)
+    - [Application Script](https://github.com/fokhrun/restaurant_reservation#application-script-)
     - [Data Model](https://github.com/fokhrun/restaurant_reservation#data-model-)
         - [Database Management](https://github.com/fokhrun/restaurant_reservation#database-management-)
     - [Flask Templates](https://github.com/fokhrun/restaurant_reservation#flask-templates-)
