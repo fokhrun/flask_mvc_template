@@ -42,7 +42,7 @@
 - [Bugs](https://github.com/fokhrun/restaurant_reservation#bugs)
 - [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements-)
 - [Credits](https://github.com/fokhrun/restaurant_reservation#credits-)
-- [Project Management](https://github.com/fokhrun/restaurant_reservation#project-management)
+- [Project Management](https://github.com/fokhrun/restaurant_reservation#project-management-)
 
 ## Overview [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -578,7 +578,7 @@ To work with Bootstrap, copy-paste the stylesheet <link> into the <head> of `bas
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 ```
 
-To working with custom theme. e.g., to influence the coloring theme in a more custom manner than what `bootstrap` provides, we use [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like `node-sass` to compile `SCSS` files into `CSS`. 
+To work with a custom theme. e.g., to influence the coloring theme in a more custom manner than what `bootstrap` provides, we use [`SCSS`](https://www.geeksforgeeks.org/what-is-the-difference-between-css-and-scss/), which is a superset of `CSS`. As `Flask` does not support `SCSS` natively, we need to use a tool like `node-sass` to compile `SCSS` files into `CSS`. 
 
 To add global `SCSS` in a `Flask` application, we need to compile the SCSS files into CSS files. To do that, carry out the following steps:
 
@@ -648,15 +648,7 @@ class FlaskAppTestCase(unittest.TestCase):
 
 This class can be used as `TestTableReservation(FlaskAppTestCase)`, which inherits its `setUp` and `tearDown` functions unless overridden.
 
-We implemented the following test cases using this class:
-- 
-
 We defined another class named `FlaskAppTestCaseWithModels`, which creates the test app and populates the test database with some dummy tables and entries based on our models. This class is used when the models need to be accessed. Both these classes are defined in `tests\utils.py`.
-
-We implemented the following test cases using this class:
-
-- A user is an admin user
-- Information about reservations is fetched
 
 ### Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -664,19 +656,19 @@ We implemented the following test cases using this class:
 
 The following manual testing has been carried out and validated
 
-- Interactions with site navigation has been thorougly tested
+- Interactions with site navigation have been thoroughly tested
     - Only Home (`Spice Magic`) and Restaurant `menu` navigation open to every site visitor
     - In addition to the above, the `Reserve` navigation is available to every authenticated user
-    - In addition to the above, the `Admin` navigation is avialable to restaurant `admin` user
+    - In addition to the above, the `Admin` navigation is available to restaurant `admin` user
 - Registration and Login
     - Only authenticated `guest` can be created using the registration link
-    - While creating the `guest` using registration or login with an existing credention, the validations must pass to proceed
-        - all entries has to be provided
+    - While creating the `guest` using registration or login with an existing credential, the validations must pass to proceed
+        - all entries have to be provided
         - `username` with length 5, this can be changed to a different length later on
         - `email` with the right structure
         - `password` with length 3, this can be changed to a different length later on 
-        - `password` has to confirmed by entering twice (in registration)
-    - Only `registered` user can log in
+        - `password` has to be confirmed by entering twice (in registration)
+    - Only `registered` users can log in
     - `Admin` user can only be created using the dev team, using the initialization script or manually
 - Reservation
     - All authenticated `user` can reserve any available slots
@@ -688,7 +680,6 @@ The following manual testing has been carried out and validated
 
 #### Front End Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
     
-    namenu, buttons to from footer to the top, 
 - `HTML`: codes have been validated using `https://validator.w3.org/`. No errors or warnings are reported after fixing some minor mistakes.
 - `CSS`: codes are generated using the `node-sass`, which makes the w3c validator `https://jigsaw.w3.org/css-validator` non-applicable. 
 - `Javascript`: no automated test for javascript has been added yet. 
@@ -772,13 +763,13 @@ Open Issues:
 - Make the role of the `User` model non-nullable
 - Front-end validation methods do not disappear at the right time
 - User can reserve for past days, which should not be allowed
-- Use lower resolution images to load the site faster
+- Use lower-resolution images to load the site faster
 
 ## Future Improvements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 - A more consistent and richer form validation
 - Add more unit tests for `app\auth\forms.py`, `app\auth\views.py`, `app\main\views.py`, `app\models.py`, `app\main\errors.py`
-- Add more mocking based tests where the database and api are involved
+- Add more mocking-based tests where the database and API are involved
 - Add Javascript-based validation for the login/registration pages
 - Add a more elegant reservation system where a user does not have to mention which table, rather the guest number
 - Add a mechanism to provide remarks for reservations
@@ -786,8 +777,9 @@ Open Issues:
 - Add an Email-based two-step registration process for new users
 - Add a mechanism to reset passwords of an existing user
 - Add a mechanism to remove daily, weekly, and monthly reservation slots
-- Add a mechanism send email to users about reservation
-- Add a better admin panel for creating/deleting/updating reservation slots for the admin 
+- Add a mechanism to send emails to users about reservation
+- Add a better admin panel for creating/deleting/updating reservation slots for the admin
+- Add a better way to document
 
 ## Credits [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
