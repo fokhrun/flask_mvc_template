@@ -32,7 +32,7 @@
     - [VSCode Debugger](https://github.com/fokhrun/restaurant_reservation#vscode-debugger-)
     - [Language And Library Requirements](https://github.com/fokhrun/restaurant_reservation#language-and-library-requirements-)
     - [Working With Styling](https://github.com/fokhrun/restaurant_reservation#working-with-styling-)
-    - [Testing & Validation](https://github.com/fokhrun/restaurant_reservation#testing-&-validation-)
+    - [Testing And Validation](https://github.com/fokhrun/restaurant_reservation#testing-and-validation-)
         - [Running Tests](https://github.com/fokhrun/restaurant_reservation#running-tests-)
         - [Test Cases](https://github.com/fokhrun/restaurant_reservation#test-cases-)
 - [Deployment to Production](https://github.com/fokhrun/restaurant_reservation#deployment-to-production-)
@@ -407,7 +407,7 @@ def secret():
     return 'Only authenticated users are allowed!'
 ```
 
-#### Login and Registration Form [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+#### Login And Registration Form [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
 The login form that will be presented to users has a text field for the email address, a password field, a “remember me” checkbox, and a submit button. In addition, a set of validators needs to be implemented to ensure that wrong inputs are not passed. All of these are very straightforward to implement using `flask-wtf` and `wtforms`. 
 
@@ -425,11 +425,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Log In')
 ```
 
-Other validations have been implemented that makes it safer for users to work with the login form as illustrated by the following image:
+Other validations have been implemented that make it safer for users to work with the login form as illustrated by the following image:
 - Image 1 shows an empty form 
 - Image 2 shows the state when a mandatory field is left empty. This validation has been implemented using `flask-wtf` library
 - Image 3 shows the state when an input has been provided in an incorrect format. This validation has been implemented using custom Javascript in `app\static\javascript\script.js`.
-- Image 4 shows the state when an incorrect input is provided. The flash messsage is actually returned by the controlling function after validation failed in the backend.
+- Image 4 shows the state when an incorrect input is provided. The flash message is actually returned by the controlling function after validation fails in the backend.
 
 ![Login Screen With Validations](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_form_multiple.png)
 
@@ -471,7 +471,7 @@ This script is imported in `login.html` and `register.html` as follows.
 {% endblock %}
 ```
 
-The script primarily handles custom validation on the registration and login form rendered on the page. It basically checks `username`, `email address`, and `password` conforms to a certain structure. For more details, check `app\static\javascript\script.js`.
+The script primarily handles custom validation on the registration and login form rendered on the page. It basically checks `username`, `email address`, and `password` to conform to a certain structure. For more details, check `app\static\javascript\script.js`.
 
 ### Handling Reservation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -479,7 +479,7 @@ The following diagram shows a wireframe of a user changing reservation.
 
 ![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
 
-We implemented this wireframe into a page that interacts with the reservation table through the flask app. The following diagram shows how an authenticated guest changes reservations. The guest does that by canceling an existing reservation, picking a new date and slot, and reserving a new one. While carrying this out the app handles request from the page session, pick the current user, run a filter query against the reservation table, and updates the reservation table to reverse slots.
+We implemented this wireframe into a page that interacts with the reservation table through the Flask app. The following diagram shows how an authenticated guest changes reservations. The guest does that by canceling an existing reservation, picking a new date and slot, and reserving a new one. While carrying this out the app handles request from the page session, pick the current user, run a filter query against the reservation table, and updates the reservation table to reverse slots.
 
 ![Guest Reserve Unreserve](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/guest_reserve_unreserve.png)
 
