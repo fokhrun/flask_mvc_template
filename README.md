@@ -24,7 +24,7 @@
         - [Authentication Blueprint](https://github.com/fokhrun/restaurant_reservation#authentication-blueprint-)
         - [User Authentication](https://github.com/fokhrun/restaurant_reservation#user-authentication-)
         - [Protecting Routes](https://github.com/fokhrun/restaurant_reservation#protecting-routes-)
-        - [Login and Registration Form](https://github.com/fokhrun/restaurant_reservation#login-and-registration-form)
+        - [Login and Registration Form](https://github.com/fokhrun/restaurant_reservation#login-and-registration-form-)
         - [Authentication Templates](https://github.com/fokhrun/restaurant_reservation#authentication-templates-)
     - [Handling Reservation](https://github.com/fokhrun/restaurant_reservation#handling-reservation-)
 - [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements-)
