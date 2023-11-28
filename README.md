@@ -185,7 +185,6 @@ Check `app\__init__.py` for more details.
 
 Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in the factory app creation method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. As mentioned earlier, the there are two view subsystems, `main` and `auth`. 
 
-
 The `main` blueprint covers the common site information and reservation routes: `\`, `\menu`, `\reserve`, and `\admin`, etc. These route controllers are defined in `app\main\views.py`. Typically blueprints are defined as follows. 
 
 ```
@@ -293,10 +292,11 @@ The base templates provides common
 - footer section provided key information about the restaurent
 
 The following image shows how the front page is visually extended with site navigation menu, login/logout segment, and the footer section.
+
 ![front Screen Marked](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/front_screen_marked.png)
 
-
 Note that the site navigation bar varies based on the type of users as illustrated by the following images. This goes in line with the functional requirement of the site. 
+
 ![Site Menu](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/site_menu.png)
 
 ### Handling Authentication [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
@@ -475,7 +475,21 @@ The script primarily handles custom validation on the registration and login for
 
 ### Handling Reservation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
+The following diagram shows a wireframe of a user changing reservation.  
+
 ![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
+
+We implemented this wireframe into a page that interacts with the reservation table in the through the flask app. The following diagram shows how an authenticated guest change reservations. The guest does that by cancelling an existing reservations, picking a new date and slot, and reserve a new one. While carrying this out the app handles request from the page session, pick the current user, run a filter query against reservation table, and updates the reservation table to reverse slots.
+
+![Guest Reserve Unreserve](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/guest_reserve_unreserve.png)
+
+The admin has a slightly different view where he can see everyone's reservation, including the one he made for the offline users. The following image shows that view. 
+
+![Admin Reserve Unreserve](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/admin_reserve_unreserve.png)
+
+Finally, the admin can create new slots for the upcoming months, one month at a time. This page can only be accessed by the admin user. The following image shows that view.
+
+![create New Slots](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/admin_reserve_unreserve.png)
 
 ## Developer Guide [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
