@@ -42,6 +42,7 @@
 - [Bugs](https://github.com/fokhrun/restaurant_reservation#bugs)
 - [Future Improvements](https://github.com/fokhrun/restaurant_reservation#future-improvements-)
 - [Credits](https://github.com/fokhrun/restaurant_reservation#credits-)
+- [Project Management](https://github.com/fokhrun/restaurant_reservation#project-management)
 
 ## Overview [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -794,3 +795,6 @@ Photos by:
 1. Chan Walrus: [front_image.jpg](https://www.pexels.com/photo/white-and-brown-cooked-dish-on-white-ceramic-bowls-958545/)
 3. Mareefe: [about_1.jpg](https://www.pexels.com/photo/three-condiments-in-plastic-containers-674483/)
 2. Gagan Kaur: [about_2.jpg](https://www.pexels.com/photo/a-woman-cooking-indian-food-3531700/)
+
+## Project Management [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
+Initially the project management has been carried out in a local excel file. Later the notes have been migrated to the GitHub project [@fokhrun's portfolio project 4](https://github.com/users/fokhrun/projects/2). Going forward, the GitHub project should be used. 
