@@ -149,8 +149,8 @@ For each `route`, there is a controlling function in the Flask app that receives
         - view.py
     - templates/
         - *.html: views to be rendered in the site
-    - static/: contain static file
-        - css/: css file to render HTML pages in a certain style
+    - static/: contains static file
+        - css/: CSS file to render HTML pages in a certain style
         - images/: images to be rendered on the site
         - scss/: bootstrap theme generation files
         - script/: javascript files
@@ -165,7 +165,7 @@ For each `route`, there is a controlling function in the Flask app that receives
 - .env_template/: template for .env file containing key information to work with the flask app and local MySQL database, should not be renamed to .env
 - .gitignore: files and folders to be ignored, such venv, .env
 - LICENSE: source code usage and copy license
-- Procfile : app run command to be used in the Heroku production environment
+- Procfile: app run command to be used in the Heroku production environment
 - runtime.txt: Python runtime to be used in the Heroku production environment
 - requirements.txt: Python library (and its version) to be used in development, testing, and production environment
 - config.py: configuration for Flask and MySQL in development, testing, and production environment
@@ -183,7 +183,7 @@ Check `app\__init__.py` for more details.
 
 ### Flask Blueprints [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in the factory app creation method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. As mentioned earlier, the there are two view subsystems, `main` and `auth`. 
+Using [Blueprints](https://flask.palletsprojects.com/en/2.2.x/blueprints/) is an effective way to define routes in the global scope in the factory app creation method. Using different blueprints for different subsystems of the application is a great way to keep the code neatly organized. As mentioned earlier, there are two view subsystems, `main` and `auth`. 
 
 The `main` blueprint covers the common site information and reservation routes: `\`, `\menu`, `\reserve`, and `\admin`, etc. These route controllers are defined in `app\main\views.py`. Typically blueprints are defined as follows. 
 
@@ -215,7 +215,7 @@ def index():
     # ..
 ```
 
-Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py`, and `app\main\erorrs.py` for more details. The `auth` blueprint covers the authentication related routes: `\login`, `\logout`, and `\register`.  Check `app\__init__.py`, `app\auth\__init__.py`, and `app\auth\views.py` for more details.
+Check `app\__init__.py`, `app\main\__init__.py`, `app\main\views.py`, and `app\main\erorrs.py` for more details. The `auth` blueprint covers the authentication-related routes: `\login`, `\logout`, and `\register`.  Check `app\__init__.py`, `app\auth\__init__.py`, and `app\auth\views.py` for more details.
 
 ### Application Script [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
@@ -242,17 +242,17 @@ def make_shell_context():
 The data model employed in this project is illustrated in the following diagram. It includes four tables:
 
 - `Role`: that implements the type of the user
-- `User`: that implements the user profile including authentication capabilities,, has many-to-one relationship with `Role`
+- `User`: that implements the user profile including authentication capabilities, has a many-to-one relationship with `Role`
 - `Table`: that implements the concept of table, which brings capacity information for reservations
-- `Reservation`: that implements that reservation concept that has one-to-many relationship with `Table` and one-to-one relationship `User`
+- `Reservation`: that implements that reservation concept that has a one-to-many relationship with `Table` and a one-to-one relationship `User`
 
-These model is implemented as model classes using `flask-sqlalchemy`. Check those classes in `app\models.py`.In addition, there are two Enum classes that implements fixed table capacities and reservation slots.
+These models are implemented as model classes using `flask-sqlalchemy`. Check those classes in `app\models.py`.In addition, there are two Enum classes that implement fixed table capacities and reservation slots.
 
 ![Data Model](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/data_model.png)
 
 #### Database Management [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-We manage MySQL database using `mysqlclient` and `alembic` library. It is done through migrate object, which is created as 
+We manage MySQL database using `mysqlclient` and `alembic` libraries. It is done through the migrate object, which is created as 
 
 ```
 from flask_migrate import Migrate
@@ -279,19 +279,19 @@ keyword arguments, which can be input from the front end but can also be additio
 
 #### Base Template [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-All the templates extends the `base.html` template as follows `{% extends "base.html" %}`. 
+All the templates extend the `base.html` template as follows `{% extends "base.html" %}`. 
 
-The base templates provides common
-- <head> section, which includes the same page title and css 
+The base templates provide common
+- <head> section, which includes the same page title and CSS 
 - site navigation menu
 - login/logout segment
 - flash message block
-- page content block that is overriden by <body> segments of other pages
-- script block for jquery and bootstrap
+- page content block that is overridden by <body> segments of other pages
+- script block for jquery and Bootstrap
 - script block that is imported and can be extended by other pages
-- footer section provided key information about the restaurent
+- The footer section provided key information about the restaurant
 
-The following image shows how the front page is visually extended with site navigation menu, login/logout segment, and the footer section.
+The following image shows how the front page is visually extended with the site navigation menu, login/logout segment, and the footer section.
 
 ![front Screen Marked](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/front_screen_marked.png)
 
@@ -431,11 +431,11 @@ Other validations have been implemented that makes it safer for users to work wi
 - Image 3 shows the state when an input has been provided in an incorrect format. This validation has been implemented using custom Javascript in `app\static\javascript\script.js`.
 - Image 4 shows the state when an incorrect input is provided. The flash messsage is actually returned by the controlling function after validation failed in the backend.
 
-![Login Screen With Validations](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_screen_multiple.png)
+![Login Screen With Validations](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_form_multiple.png)
 
-Similar design has been applied to registration form as illustrated below:
+A similar design has been applied to the registration form as illustrated below:
 
-![Registration Screen With Validations](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/registration_form_multiple_screen_multiple.png)
+![Registration Screen With Validations](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/registration_form_multiple.png)
 
 
 #### Authentication Templates [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
@@ -454,7 +454,7 @@ We implemented two templates namely `login.html` and `logout.html` that have sim
 
 The following image how the login and logout flow shows up in the navigation menu. 
 
-![Login and Logout Flow](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flow.png.png)
+![Login and Logout Flow](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/login_logout_flow.png)
 
 Note that `base.html` template also provides the following script.
 
@@ -479,7 +479,7 @@ The following diagram shows a wireframe of a user changing reservation.
 
 ![Reservation wireframe](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/wireframe-reservation.png)
 
-We implemented this wireframe into a page that interacts with the reservation table in the through the flask app. The following diagram shows how an authenticated guest change reservations. The guest does that by cancelling an existing reservations, picking a new date and slot, and reserve a new one. While carrying this out the app handles request from the page session, pick the current user, run a filter query against reservation table, and updates the reservation table to reverse slots.
+We implemented this wireframe into a page that interacts with the reservation table through the flask app. The following diagram shows how an authenticated guest changes reservations. The guest does that by canceling an existing reservation, picking a new date and slot, and reserving a new one. While carrying this out the app handles request from the page session, pick the current user, run a filter query against the reservation table, and updates the reservation table to reverse slots.
 
 ![Guest Reserve Unreserve](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/guest_reserve_unreserve.png)
 
@@ -556,11 +556,11 @@ Here's an example configuration for debugging a Flask app in VSCode:
 
 ### Language/Library Requirements [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-The two main languages that leverages libraries are `Python` and `Javascript`. 
+The two main languages that leverage libraries are `Python` and `Javascript`. 
 
-For Python, we manage libraries in `requirements.txt`. The libraries are installed in the local development environment using `pip`. It is a good idea to refresh this file whenever a package is installed or upgraded. The libraries should be installed in a virtual environment. The instructions are given in a first few steps in [Developer Environment](https://github.com/fokhrun/restaurant_reservation#developer-environment-). 
+For Python, we manage libraries in `requirements.txt`. The libraries are installed in the local development environment using `pip`. It is a good idea to refresh this file whenever a package is installed or upgraded. The libraries should be installed in a virtual environment. The instructions are given in the first few steps in [Developer Environment](https://github.com/fokhrun/restaurant_reservation#developer-environment-). 
 
-The requirements file mentions the version numbers with each of the libraries. However, the current version of flask-login is not compatible with flask > 3.0. The fixes are in the way to make it work soon. More details can be found in this [issue](https://github.com/maxcountryman/flask-login/issues/805). Until then, it is recommended to use a widely accepted [temporary fix](https://github.com/maxcountryman/flask-login/issues/809).
+The requirements file mentions the version numbers for each of the libraries. However, the current version of flask-login is not compatible with flask > 3.0. The fixes are on the way to make it work soon. More details can be found in this [issue](https://github.com/maxcountryman/flask-login/issues/805). Until then, it is recommended to use a widely accepted [temporary fix](https://github.com/maxcountryman/flask-login/issues/809).
 
 For Javascript, the libraries are installed using `npm`, which requires `node.js`. In this project, we leverage `bootstrap` and `node-sass`, which are installed using `npm`. Install `node.js` using this [link](https://nodejs.org/en/download). We recommend installing these packages locally. It requires defining a `package.json` file where versions of the libraries are mentioned. The packages are installed using the command `npm install <package>`, which installs it local node_modules directory, which should be included in the `.gitignore` folder.
 
@@ -570,7 +570,7 @@ In this project, we are working with `bootstrap@4.5`. To install `bootstrap`, ru
 
 This project leverages `bootstrap` for default themes and `node-sass` for custom themes for styling. 
 
-To work with Bootstrap, copy-paste the stylesheet <link> into the <head> of `base.html`, which is used in all other html files.
+To work with Bootstrap, copy-paste the stylesheet <link> into the <head> of `base.html`, which is used in all other HTML files.
 
 ```
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -587,7 +587,7 @@ To add global `SCSS` in a `Flask` application, we need to compile the SCSS files
     @import "theme_color";
     @import "./node_modules/bootstrap/scss/bootstrap";
     ```
-    Here the `theme_color` is another scss file where the theme colors are defined. 
+    Here the `theme_color` is another CSS file where the theme colors are defined. 
 
 - Compile the SCSS file into a CSS file using the command `node-sass app/static/scss/main.scss app/static/css/main.css`
 
@@ -603,11 +603,11 @@ Note that every time there is a change in the SCSS files, we need to recompile t
 
 ### Testing & Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-We leverage `unittest` library for Python code testing. Some example of vanilla usage of the `TestCase` class of the module can be found in `tests\main\test_utils.py`, which tests python functions in `app\main\utils.py`. Often times testing requires mocking certain function call so that the test focuses only on the logic part of the code instead of implementing all depdencies. Refer to the implementation of `TestModelUtils` in `app\main\utils.py` for testing using mock. 
+We leverage `unittest` library for Python code testing. Some examples of vanilla usage of the `TestCase` class of the module can be found in `tests\main\test_utils.py`, which tests Python functions in `app\main\utils.py`. Often times testing requires mocking certain function calls so that the test focuses only on the logic part of the code instead of implementing all dependencies. Refer to the implementation of `TestModelUtils` in `app\main\utils.py` for testing using mock. 
 
 #### Running Tests [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-We added a custom command with flask to run the tests by implementing the following function in `wsgi.py`.
+We added a custom command with Flask to run the tests by implementing the following function in `wsgi.py`.
 
 ```
 @app.cli.command()
@@ -621,11 +621,11 @@ To work with the tests
 - Add test codes in the `tests` or its subfolders (follow the app folder structure)
 - Run `flask test` or `flask test tests.<specific test folder or file inside test>` 
 
-We are also measure the test coverage using the `coverage` module. See `wsgi.test` for more details.
+We also measure the test coverage using the `coverage` module. See `wsgi.test` for more details.
 
 #### Test Cases [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
-Testing some of the function requires an application. It requires creation of flask test app using the `TestConfig` in `config.py`. It can be implemented using the following class:
+Testing some of the functions requires an application. It requires the creation of a flask test app using the `TestConfig` in `config.py`. It can be implemented using the following class:
 
 ```
 class FlaskAppTestCase(unittest.TestCase):
@@ -647,12 +647,12 @@ This class can be used as `TestTableReservation(FlaskAppTestCase)`, which inheri
 We implemented the following test cases using this class:
 - 
 
-We defined another class named `FlaskAppTestCaseWithModels`, which creates the test app and populates the test database with some dummy tables and entries based on our models. This class is used when the models needs to be accessed. Both these classes are defined in `tests\utils.py`.
+We defined another class named `FlaskAppTestCaseWithModels`, which creates the test app and populates the test database with some dummy tables and entries based on our models. This class is used when the models need to be accessed. Both these classes are defined in `tests\utils.py`.
 
 We implemented the following test cases using this class:
 
 - A user is an admin user
-- Information about reservations are fetched
+- Information about reservations is fetched
 
 ### Code Validation [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
