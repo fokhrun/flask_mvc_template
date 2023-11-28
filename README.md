@@ -621,7 +621,9 @@ To work with the tests
 - Add test codes in the `tests` or its subfolders (follow the app folder structure)
 - Run `flask test` or `flask test tests.<specific test folder or file inside test>` 
 
-We also measure the test coverage using the `coverage` module. See `wsgi.test` for more details.
+We also measure the test coverage using the `coverage` module. See `wsgi.test` for more details. Currently, the coverage is 32% with 27 tests. For more details, check the following:
+
+![Test Coverage](https://github.com/fokhrun/restaurant_reservation/blob/main/doc_images/test_coverage.png)
 
 #### Test Cases [^](https://github.com/fokhrun/restaurant_reservation#table-of-contents)
 
