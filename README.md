@@ -30,7 +30,7 @@
 - [Developer Guide](https://github.com/fokhrun/restaurant_reservation#developer-guide-)
     - [Developer Environment](https://github.com/fokhrun/restaurant_reservation#developer-environment-)
     - [VSCode Debugger](https://github.com/fokhrun/restaurant_reservation#vscode-debugger-)
-    - [Language/Library Requirements](https://github.com/fokhrun/restaurant_reservation#language/library-requirements-)
+    - [Language And Library Requirements](https://github.com/fokhrun/restaurant_reservation#language-and-library-requirements-)
     - [Working With Styling](https://github.com/fokhrun/restaurant_reservation#working-with-styling-)
     - [Testing & Validation](https://github.com/fokhrun/restaurant_reservation#testing-&-validation-)
         - [Running Tests](https://github.com/fokhrun/restaurant_reservation#running-tests-)
